@@ -1,105 +1,152 @@
 <?php
-// Email HTML Template for Gatita Bakes
+/**
+ * Gatita Bakes - Email Template Example
+ *
+ * Variables available:
+ * $email_customer_name
+ * $email_customer_email
+ * $email_customer_phone
+ * $email_order_type             (e.g., "Pickup" or "Delivery")
+ * $email_pickup_location_text   (Text of selected location, or 'N/A')
+ * $email_delivery_address_html  (Formatted HTML address, or 'N/A')
+ * $email_order_items_html       (HTML <tr> elements for the items table)
+ * $email_order_total            (Formatted total price string, e.g., "25.50")
+ */
 
-$order_number = $order_number ?? rand(1001, 9999);
-$selected_items = $selected_items ?? [];
-$total = $total ?? 0;
-$name = $name ?? '';
-$email = $email ?? '';
-$mobile = $mobile ?? '';
-$pickup_delivery = $pickup_delivery ?? 'pickup';
-$address = $address ?? '';
-$pickup_location = $pickup_location ?? '';
-$need_by = $need_by ?? '';
-$venmo_link = 'https://account.venmo.com/u/katvalderrama';
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly
+}
+
+// Set desired background colors, fonts etc.
+$bg_color = '#fdfaf7';
+$body_color = '#ffffff';
+$text_color = '#5a4e46';
+$brand_color = '#e5a98c';
+$font_family = 'Arial, Helvetica, sans-serif';
+
 ?>
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <style>
-    body {
-      font-family: 'Georgia', serif;
-      background-color: #fffaf6;
-      color: #333;
-      padding: 2em;
-    }
-    .wrapper {
-      max-width: 700px;
-      margin: 0 auto;
-      background: white;
-      padding: 2em;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-    h2 {
-      color: #d57c4a;
-    }
-    .summary-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1em;
-    }
-    .summary-table th, .summary-table td {
-      padding: 10px;
-      border: 1px solid #ddd;
-    }
-    .summary-table th {
-      background-color: #f3e7df;
-      text-align: left;
-    }
-    .footer {
-      margin-top: 2em;
-      font-size: 0.9em;
-      color: #555;
-    }
-    .venmo-link {
-      display: inline-block;
-      margin-top: 1em;
-      padding: 0.75em 1.5em;
-      background: #3d95ce;
-      color: white;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Gatita Bakes Order</title>
+    <style>
+        /* Add basic responsive styles and resets */
+        body { margin: 0; padding: 0; background-color: <?php echo $bg_color; ?>; font-family: <?php echo $font_family; ?>; }
+        table { border-collapse: collapse; width: 100%; }
+        td { padding: 0; }
+        img { border: 0; display: block; outline: none; text-decoration: none; }
+        .content-table { width: 100%; max-width: 600px; margin: 0 auto; background-color: <?php echo $body_color; ?>; border-radius: 8px; overflow: hidden; }
+        .header { background-color: <?php echo $brand_color; ?>; padding: 20px; text-align: center; }
+        .header h1 { color: #ffffff; margin: 0; font-size: 24px; }
+        .body-content { padding: 30px; color: <?php echo $text_color; ?>; font-size: 16px; line-height: 1.6; }
+        .body-content p { margin: 0 0 1em 0; }
+        .order-details th, .order-details td { padding: 12px 15px; border: 1px solid #eee; text-align: left; }
+        .order-details th { background-color: #f9f9f9; font-weight: bold; }
+        .order-details .total-row td { border-top: 2px solid #ddd; font-weight: bold; font-size: 1.1em; }
+        .order-details .item-name { /* styles for item name cell */ }
+        .order-details .item-qty { text-align: center; }
+        .order-details .item-price { text-align: right; }
+        .venmo-button { display: inline-block; background-color: #0074de; /* Venmo Blue */ color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px; }
+        .footer { background-color: #f2f2f2; padding: 20px; text-align: center; font-size: 12px; color: #888; }
+    </style>
 </head>
 <body>
-  <div class="wrapper">
-    <h2>Thank you for your order, <?= esc_html($name) ?>!</h2>
-    <p>Your order number is <strong>#<?= $order_number ?></strong></p>
-    <p>Below is a summary of your order, which will be ready by <strong><?= esc_html($need_by) ?></strong>.</p>
-
-    <table class="summary-table">
-      <tr><th>Item</th><th>Quantity</th><th>Price</th></tr>
-      <?php foreach ($selected_items as $item): ?>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: <?php echo $bg_color; ?>;">
         <tr>
-          <td><?= esc_html($item['name']) ?></td>
-          <td><?= esc_html($item['quantity']) ?></td>
-          <td>$<?= number_format($item['quantity'] * 12, 2) ?></td>
+            <td align="center" style="padding: 20px 0;">
+                <!-- Main Content Table -->
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="content-table">
+                    <!-- Header -->
+                    <tr>
+                        <td class="header">
+                            <h1>Gatita Bakes Order</h1>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td class="body-content">
+                            <p>Hi <?php echo esc_html($email_customer_name); ?>,</p>
+                            <p>Thank you for your order! Here are the details:</p>
+
+                            <h2 style="color: <?php echo $brand_color; ?>; margin-top: 30px; margin-bottom: 15px;">Order Summary</h2>
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="order-details">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th style="text-align: center;">Qty</th>
+                                        <th style="text-align: right;">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php echo $email_order_items_html; // Output the table rows generated by PHP ?>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="total-row">
+                                        <td colspan="2" style="text-align: right;"><strong>Total:</strong></td>
+                                        <td style="text-align: right;"><strong>$<?php echo esc_html($email_order_total); ?></strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                            <h2 style="color: <?php echo $brand_color; ?>; margin-top: 30px; margin-bottom: 15px;">Your Information</h2>
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td style="padding: 5px 0;"><strong>Name:</strong></td>
+                                    <td style="padding: 5px 0;"><?php echo esc_html($email_customer_name); ?></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px 0;"><strong>Email:</strong></td>
+                                    <td style="padding: 5px 0;"><?php echo esc_html($email_customer_email); ?></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px 0;"><strong>Phone:</strong></td>
+                                    <td style="padding: 5px 0;"><?php echo esc_html($email_customer_phone); ?></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px 0;"><strong>Order Type:</strong></td>
+                                    <td style="padding: 5px 0;"><?php echo esc_html($email_order_type); ?></td>
+                                </tr>
+
+                                <?php //!--- NEW: Conditional Pickup/Delivery Info --- ?>
+                                <?php if ($email_order_type === 'Pickup' && $email_pickup_location_text !== 'N/A') : ?>
+                                    <tr>
+                                        <td style="padding: 5px 0;"><strong>Pickup Location:</strong></td>
+                                        <td style="padding: 5px 0;"><?php echo $email_pickup_location_text; // Already escaped in PHP handler ?></td>
+                                    </tr>
+                                <?php elseif ($email_order_type === 'Delivery' && $email_delivery_address_html !== 'N/A') : ?>
+                                    <tr>
+                                        <td style="padding: 5px 0; vertical-align: top;"><strong>Delivery Address:</strong></td>
+                                        <td style="padding: 5px 0;"><?php echo $email_delivery_address_html; // Contains HTML <br> tags, already escaped in handler ?></td>
+                                    </tr>
+                                <?php endif; ?>
+                                <?php //!--- END: Conditional Pickup/Delivery Info --- ?>
+
+                            </table>
+
+                            <h2 style="color: <?php echo $brand_color; ?>; margin-top: 30px; margin-bottom: 15px;">Payment Instructions</h2>
+                            <p>Please complete your payment via Venmo. Click the button below or scan our QR code (if you have one to insert here).</p>
+                            <p><strong>Venmo Username:</strong> @YourVenmoHandle</p> <?php //!-- IMPORTANT: Replace with your actual Venmo handle -->
+                            <p style="text-align: center;">
+                                <a href="https://venmo.com/YourVenmoHandle?txn=pay&amount=<?php echo esc_attr($email_order_total); ?>¬e=GatitaBakesOrder_<?php echo esc_attr($email_customer_name); ?>" target="_blank" class="venmo-button">Pay $<?php echo esc_html($email_order_total); ?> on Venmo</a>
+                                <?php //!-- IMPORTANT: Replace YourVenmoHandle in URL -->
+                            </p>
+                            <p>Please include your name or order details in the Venmo note if possible.</p>
+                            <p>We'll confirm once payment is received. Thanks again for supporting Gatita Bakes!</p>
+                            <p style="margin-top: 30px; font-style: italic; text-align: center;">"The smell of fresh bread is the best kind of welcome."</p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td class="footer">
+                            © <?php echo date('Y'); ?> Gatita Bakes. All rights reserved.<br>
+                            <?php // Add address or contact info if desired ?>
+                        </td>
+                    </tr>
+                </table>
+            </td>
         </tr>
-      <?php endforeach; ?>
-      <tr><td colspan="2"><strong>Total</strong></td><td><strong>$<?= number_format($total, 2) ?></strong></td></tr>
     </table>
-
-    <p>
-      Delivery Method: <strong><?= esc_html(ucfirst($pickup_delivery)) ?></strong><br>
-      <?php if ($pickup_delivery === 'delivery'): ?>
-        Delivery Address: <?= esc_html($address) ?><br>
-      <?php else: ?>
-        Pickup Location: <?= esc_html($pickup_location) ?><br>
-      <?php endif; ?>
-      Contact: <?= esc_html($email) ?> / <?= esc_html($mobile) ?>
-    </p>
-
-    <p>Please complete payment using Venmo by clicking the button below:</p>
-    <a href="<?= esc_url($venmo_link) ?>" class="venmo-link" target="_blank">Pay on Venmo</a>
-
-    <div class="footer">
-      <p>We'll review your order and confirm once payment has been received. If you have any questions, just reply to this email.</p>
-      <p><em>"The smell of fresh bread is the best kind of welcome."</em><br>
-      &mdash; Gatita Bakes</p>
-    </div>
-  </div>
 </body>
 </html>
