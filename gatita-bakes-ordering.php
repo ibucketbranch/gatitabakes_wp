@@ -1,117 +1,292 @@
-/* =========================================================================
-   Gatita Bakes Ordering - Custom Stylesheet v1.4.0 (Dynamic Form Update)
-   ========================================================================= */
+<?php
+/**
+ * Plugin Name:       Gatita Bakes Ordering
+ * Plugin URI:        https://www.gatitabakes.com/
+ * Description:       Custom ordering system for Gatita Bakes artisan bread and bagels. Allows pickup/delivery orders and sends Venmo payment instructions via email.
+ * Version:           1.4.0  // Updated version number for dynamic form logic
+ * Author:            Your Name / Michael
+ * Author URI:        https://www.gatitabakes.com/
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       gatita-bakes-ordering
+ * Domain Path:       /languages
+ */
 
-/* --- Basic Reset & Defaults --- */
-#gatita-order-form *, .gatita-hero-section * { box-sizing: border-box; }
-
-/* --- Hero Section Styles (Unchanged) --- */
-.gatita-hero-section { width: 100vw; position: relative; left: 50%; transform: translateX(-50%); overflow: hidden; box-sizing: border-box; background-image: url('../images/hero-page-fullpage.png'); background-size: cover; background-position: center center; background-repeat: no-repeat; min-height: 60vh; display: flex; justify-content: center; align-items: center; padding: 40px 20px; text-align: center; margin-bottom: 30px; }
-.gatita-hero-content { background-color: rgba(40, 30, 25, 0.4); padding: 30px 40px; border-radius: 8px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-.gatita-hero-content h1 { color: #fff; font-size: 3.2em; margin-top: 0; margin-bottom: 0.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.6); }
-.gatita-hero-content p { color: #eee; font-size: 1.3em; margin-bottom: 1.5em; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
-
-/* --- General Button Styles (Unchanged) --- */
-.gatita-button { display: inline-block; background-color: #e5a98c; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 1em; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; text-transform: uppercase; letter-spacing: 1px; }
-.gatita-button:hover, .gatita-button:focus { background-color: #d4987a; color: #fff; transform: translateY(-2px); outline: none; }
-.gatita-place-order-button { padding: 15px 35px; width: 100%; }
-
-/* --- Order Form - General & Two-Column Layout (Unchanged) --- */
-#gatita-order-form { max-width: 1100px; margin: 20px auto; padding: 10px; }
-#gatita-order-form h2 { text-align: center; color: #5a4e46; margin-top: 1.5em; margin-bottom: 1em; font-weight: 600; font-size: 1.8em; }
-.gatita-order-page-wrapper { display: flex; flex-direction: column; gap: 30px; }
-@media (min-width: 820px) { .gatita-order-page-wrapper { flex-direction: row; gap: 40px; align-items: flex-start; } .gatita-order-main-content { flex: 2; } .gatita-order-sidebar { flex: 1; position: sticky; top: 40px; } }
-.gatita-order-sidebar h2 { text-align: left; font-size: 1.5em; margin-top: 1em; margin-bottom: 0.8em; border-bottom: 1px solid #eee; padding-bottom: 0.4em; }
-.gatita-order-sidebar .gatita-sidebar-section:first-child h2 { margin-top: 0; }
-.gatita-sidebar-section { margin-bottom: 25px; }
-
-/* --- Order Form - Product Slider (Unchanged from v1.3.0) --- */
-.gatita-order-main-content h2 { margin-bottom: 1.5em; }
-.gatita-product-slider { margin-left: auto; margin-right: auto; position: relative; overflow: hidden; list-style: none; padding: 0; z-index: 1; width: 100%; padding-bottom: 30px; }
-.swiper-wrapper { position: relative; width: 100%; height: 100%; z-index: 1; display: flex; transition-property: transform; box-sizing: content-box; }
-.swiper-slide { flex-shrink: 0; width: 100%; height: 100%; position: relative; transition-property: transform; padding: 5px; }
-.swiper-slide .gatita-product-card { border: 1px solid #e0dcd8; border-radius: 8px; padding: 15px; text-align: center; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); height: 100%; display: flex; flex-direction: column; }
-.swiper-slide .gatita-product-card img { max-width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; margin-bottom: 15px; }
-.swiper-slide .gatita-product-card h3 { color: #5a4e46; margin-top: 0; margin-bottom: 0.5em; font-size: 1.2em; }
-.swiper-slide .gatita-product-card p { color: #666; line-height: 1.5; font-size: 0.9em; margin-bottom: 1em; flex-grow: 1; }
-.swiper-slide .gatita-product-card .price { font-weight: bold; color: #8b7a70; font-size: 1.1em; margin-top: auto; margin-bottom: 15px; flex-grow: 0; }
-.swiper-slide .gatita-product-order-controls { margin-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; flex-grow: 0; }
-.swiper-slide .gatita-product-order-controls label { cursor: pointer; font-size: 0.9em; }
-.swiper-slide .gatita-product-order-controls input[type="checkbox"] { margin-right: 5px; width: 16px; height: 16px; }
-.swiper-slide .gatita-product-order-controls .quantity-label { margin-left: auto; margin-right: 5px; }
-.swiper-slide .gatita-product-order-controls .quantity-input { width: 55px; padding: 5px 8px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-size: 0.9em; }
-.swiper-slide .gatita-product-order-controls input[type=number]::-webkit-inner-spin-button, .swiper-slide .gatita-product-order-controls input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; } .swiper-slide .gatita-product-order-controls input[type=number] { -moz-appearance: textfield; }
-/* Swiper Navigation/Pagination Styles (Unchanged) */
-.swiper-button-prev, .swiper-button-next { position: absolute; top: 50%; width: calc(var(--swiper-navigation-size)/ 44 * 27); height: var(--swiper-navigation-size); margin-top: calc(0px - (var(--swiper-navigation-size)/ 2)); z-index: 10; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--swiper-navigation-color, #e5a98c); background-color: rgba(255, 255, 255, 0.7); border-radius: 50%; padding: 5px; transition: background-color 0.3s ease; }
-.swiper-button-prev:hover, .swiper-button-next:hover { background-color: rgba(255, 255, 255, 0.9); }
-.swiper-button-prev { left: 10px; right: auto; } .swiper-button-next { right: 10px; left: auto; }
-.swiper-button-disabled { opacity: 0.35; cursor: auto; pointer-events: none; }
-.swiper-pagination { position: absolute; text-align: center; transition: 300ms opacity; transform: translate3d(0, 0, 0); z-index: 10; } .swiper-pagination.swiper-pagination-hidden { opacity: 0; }
-.swiper-horizontal>.swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal { bottom: 10px; left: 0; width: 100%; }
-.swiper-pagination-bullet { width: var(--swiper-pagination-bullet-width, var(--swiper-pagination-bullet-size, 8px)); height: var(--swiper-pagination-bullet-height, var(--swiper-pagination-bullet-size, 8px)); display: inline-block; border-radius: 50%; background: var(--swiper-pagination-bullet-inactive-color, #ccc); opacity: var(--swiper-pagination-bullet-inactive-opacity, 0.4); }
-.swiper-pagination-bullet-active { opacity: 1; background: var(--swiper-pagination-color, #e5a98c); }
-
-/* --- Order Form - Sidebar Fields (Mostly Unchanged) --- */
-.gatita-order-sidebar .gatita-form-row { margin-bottom: 18px; }
-.gatita-order-sidebar label { display: block; margin-bottom: 6px; font-weight: bold; color: #5a4e46; font-size: 0.9em; }
-.gatita-order-sidebar input[type="text"], .gatita-order-sidebar input[type="email"], .gatita-order-sidebar input[type="tel"], .gatita-order-sidebar textarea,
-.gatita-order-sidebar select { /* Added select */
-    width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95em; transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    background-color: #fff; /* Ensure select bg is white */
-}
-.gatita-order-sidebar input:focus, .gatita-order-sidebar textarea:focus,
-.gatita-order-sidebar select:focus { /* Added select */
-    border-color: #e5a98c; outline: none; box-shadow: 0 0 0 2px rgba(229, 169, 140, 0.2);
-}
-.gatita-order-sidebar textarea { min-height: 80px; resize: vertical; }
-.required { color: #d9534f; margin-left: 3px; }
-.gatita-radio-group label { display: block; margin-bottom: 8px; font-weight: normal; cursor: pointer; font-size: 1em; }
-.gatita-radio-group input[type="radio"] { margin-right: 8px; vertical-align: middle; }
-
-/* ==========================================
-   NEW: Conditional Pickup/Delivery Section Styles
-   ========================================== */
-.gatita-form-section-dynamic {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px dashed #ccc;
-    /* --- Initial hidden state & transition --- */
-    overflow: hidden; /* Important for max-height transition */
-    max-height: 0;
-    opacity: 0;
-    transform: translateY(-10px); /* Optional: Slight move up effect */
-    transition: max-height 0.5s ease-out, opacity 0.4s ease-in, transform 0.4s ease-out;
-    visibility: hidden; /* Ensure it's not accessible when hidden */
-}
-.gatita-form-section-dynamic.visible {
-    max-height: 1000px; /* Needs to be large enough for content */
-    opacity: 1;
-    transform: translateY(0);
-    visibility: visible;
-    transition: max-height 0.6s ease-in, opacity 0.5s ease-in, transform 0.5s ease-in;
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly
 }
 
-/* Add some specific styles if needed for the headings inside dynamic sections */
-.gatita-form-section-dynamic h3 {
-    font-size: 1.1em;
-    color: #666;
-    margin-top: 0;
-    margin-bottom: 5px;
-    text-align: left;
-    border-bottom: none; /* Remove border from main h2 */
+// Define plugin constants
+define( 'GATITA_BAKES_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'GATITA_BAKES_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
+// =========================================================================
+// 1. ENQUEUE STYLES & SCRIPTS
+// =========================================================================
+function gatita_bakes_enqueue_assets() {
+    // --- Swiper JS ---
+    wp_enqueue_style('swiper-css', 'https://unpkg.com/swiper@8/swiper-bundle.min.css', array(), '8.4.7');
+    wp_enqueue_script('swiper-js', 'https://unpkg.com/swiper@8/swiper-bundle.min.js', array(), '8.4.7', true);
+
+    // --- Plugin's Custom CSS ---
+    $css_file_path = GATITA_BAKES_PLUGIN_DIR . 'assets/gatita-bakes.css';
+    if ( file_exists( $css_file_path ) ) {
+        $css_version = filemtime( $css_file_path );
+        wp_enqueue_style('gatita-bakes-style', GATITA_BAKES_PLUGIN_URL . 'assets/gatita-bakes.css', array('swiper-css'), $css_version);
+    }
+
+    // --- Plugin's Custom JS (Slider + Form Logic) ---
+    $form_js_path = GATITA_BAKES_PLUGIN_DIR . 'assets/gatita-bakes-slider.js'; // Renamed slightly for clarity, but keeping filename for now
+    if ( file_exists( $form_js_path ) ) {
+         $js_version = filemtime( $form_js_path );
+         wp_enqueue_script(
+            'gatita-bakes-form-logic', // Unique handle
+            GATITA_BAKES_PLUGIN_URL . 'assets/gatita-bakes-slider.js',
+            array('swiper-js'), // Depends on Swiper JS
+            $js_version,
+            true // Load in footer
+         );
+    }
 }
-.gatita-form-section-dynamic p small { font-size: 0.9em; color: #777; display: block; margin-bottom: 15px; }
+add_action( 'wp_enqueue_scripts', 'gatita_bakes_enqueue_assets' );
+
+// =========================================================================
+// 2. DEFINE PRODUCTS & PICKUP LOCATIONS
+// =========================================================================
+// ** IMPORTANT **: Verify 'image' filenames match files in /images/ folder (CASE-SENSITIVE)
+function gatita_bakes_get_products() {
+    return array(
+        'plain-sourdough' => array('name' => 'Plain Sourdough Loaf', 'description' => 'Classic tangy sourdough with a chewy crust.', 'price' => 8.00, 'image' => 'Plain-Sourdough-Loaf.jpg'),
+        'rosemary-sourdough' => array('name' => 'Rosemary Sourdough Loaf', 'description' => 'Infused with fresh rosemary for an aromatic flavor.', 'price' => 9.00, 'image' => 'Rosemary-Sourdough-Loaf.png'),
+        'everything-sourdough' => array('name' => 'Everything Sourdough Loaf', 'description' => 'Coated with a savory everything bagel seasoning.', 'price' => 9.50, 'image' => 'Everything-Sourdough-Loaf.jpg'),
+        'other-sourdough' => array('name' => 'Specialty Sourdough', 'description' => 'Ask about our rotating weekly special flavor!', 'price' => 10.00, 'image' => 'Other-Sourdough-Loaf.jpg'),
+        'plain-bagels' => array('name' => 'Plain Bagels (Set of 4)', 'description' => 'Traditional chewy bagels, perfect for toasting.', 'price' => 6.00, 'image' => 'Plain-Bagels.png'),
+        'cheese-jalapeno-bagels' => array('name' => 'Cheese Jalapeño Bagels (Set of 4)', 'description' => 'Spicy jalapeños and melted cheese baked right in.', 'price' => 7.50, 'image' => 'Cheese-Jalapeño-Bagels.png'),
+    );
+}
+
+// ** NEW: Define Pickup Locations **
+// Key => Display Text
+// This could later come from WP Options or another source
+function gatita_bakes_get_pickup_locations() {
+    return array(
+        'main_bakery' => 'Main Bakery (123 Bread Lane, Mon-Fri 10am-4pm)',
+        'farmers_market' => 'Saturday Farmers Market (Downtown Park, 8am-12pm)',
+        'eastside_cafe' => 'Eastside Cafe Partnership (456 Coffee St, Wed ONLY 11am-2pm)',
+        // Add more locations here
+    );
+}
 
 
-/* --- Submit Button Area (Unchanged) --- */
-.gatita-submit-row { text-align: center; margin-top: 10px; }
-.gatita-payment-note { text-align: center; font-size: 0.85em; color: #777; margin-top: 15px; }
+// =========================================================================
+// 3. LANDING PAGE SHORTCODE [gatita_bakes_landing] (No change here)
+// =========================================================================
+function gatita_bakes_landing_page_shortcode() { /* ... Landing page code remains same ... */
+    ob_start();
+    $hero_image_url = GATITA_BAKES_PLUGIN_URL . 'images/hero-page-fullpage.png'; $tagline = "The smell of fresh bread is the best kind of welcome.";
+    ?> <div class="gatita-hero-section"><div class="gatita-hero-content"><h1>Gatita Bakes</h1><p><?php echo esc_html($tagline); ?></p><a href="<?php echo esc_url(home_url('/order')); ?>" class="gatita-button">Order Now</a></div></div> <?php
+    return ob_get_clean();
+}
+add_shortcode('gatita_bakes_landing', 'gatita_bakes_landing_page_shortcode');
 
-/* --- Notification/Status Messages (Unchanged) --- */
-.gatita-notice { padding: 15px 20px; margin: 20px auto; border-radius: 5px; border: 1px solid transparent; max-width: 1100px; }
-.gatita-notice-success { color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6; }
-.gatita-notice-error { color: #a94442; background-color: #f2dede; border-color: #ebccd1; }
 
-/* --- Responsive Adjustments (Unchanged) --- */
-@media (max-width: 819px) { #gatita-order-form { max-width: 95%; } }
-@media (max-width: 480px) { /* Styles for small mobile ... */ }
+// =========================================================================
+// 4. ORDER FORM SHORTCODE [gatita_bakes_order_form]
+// =========================================================================
+function gatita_bakes_order_form_shortcode() {
+    // --- Display Status Messages ---
+    $output = '';
+    if ( isset( $_GET['order_status'] ) ) { /* ... (status message logic remains same) ... */
+        if ( $_GET['order_status'] === 'success' ) { $output .= "<div class='gatita-notice gatita-notice-success'>Thank you for your order! Please check your email for confirmation and payment instructions.</div>"; }
+        elseif ( strpos($_GET['order_status'], 'error') === 0 ) { $error_message = 'Sorry, there was an error processing your order. Please check your details and try again or contact us directly.'; $output .= "<div class='gatita-notice gatita-notice-error'>" . esc_html($error_message) . "</div>"; }
+    }
+
+    $products = gatita_bakes_get_products();
+    $pickup_locations = gatita_bakes_get_pickup_locations(); // Get pickup locations
+
+    // --- Start Form Output ---
+    ob_start();
+    ?>
+    <form id="gatita-order-form" method="POST" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>">
+        <input type="hidden" name="action" value="gatita_bakes_submit_order">
+        <?php wp_nonce_field( 'gatita_bakes_order_nonce', 'gatita_bakes_nonce' ); ?>
+
+        <div class="gatita-order-page-wrapper">
+
+            <div class="gatita-order-main-content">
+                <h2>Our Bakes</h2>
+                <?php //!--- SWIPER SLIDER STRUCTURE --- ?>
+                <div class="swiper gatita-product-slider">
+                    <div class="swiper-wrapper">
+                        <?php if ( !empty($products) && is_array($products) ) : foreach ($products as $slug => $product) : if (isset($product['name']) && isset($product['image']) && isset($product['price'])) : $image_url = GATITA_BAKES_PLUGIN_URL . 'images/' . esc_attr($product['image']); $product_id = 'product_' . esc_attr($slug); $quantity_id = 'quantity_' . esc_attr($slug); ?>
+                            <div class="swiper-slide"> <div class="gatita-product-card">
+                                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product['name']); ?>">
+                                <h3><?php echo esc_html($product['name']); ?></h3>
+                                <p><?php echo isset($product['description']) ? esc_html($product['description']) : ''; ?></p>
+                                <p class="price">$<?php echo esc_html(number_format((float)$product['price'], 2)); ?></p>
+                                <div class="gatita-product-order-controls"> <input type="checkbox" id="<?php echo $product_id; ?>" name="products[<?php echo esc_attr($slug); ?>]" value="1"> <label for="<?php echo $product_id; ?>"> Add to Order</label> <label for="<?php echo $quantity_id; ?>" class="quantity-label">Qty:</label> <input type="number" id="<?php echo $quantity_id; ?>" name="quantity[<?php echo esc_attr($slug); ?>]" value="1" min="1" max="10" class="quantity-input" style="width: 60px;" aria-label="Quantity for <?php echo esc_attr($product['name']); ?>"> </div>
+                            </div> </div>
+                        <?php endif; endforeach; endif; ?>
+                    </div>
+                    <div class="swiper-button-prev"></div> <div class="swiper-button-next"></div>
+                    <?php // <!-- <div class="swiper-pagination"></div> --> ?>
+                </div>
+                 <?php if ( empty($products) || !is_array($products) ) : ?> <p>No products available...</p> <?php endif; ?>
+            </div> <?php // END: Left column ?>
+
+
+            <div class="gatita-order-sidebar"> <?php // Right column content ?>
+
+                <div class="gatita-sidebar-section">
+                    <h2>Your Details</h2>
+                    <div class="gatita-form-row"><label for="customer_name">Name <span class="required">*</span></label><input type="text" id="customer_name" name="customer_name" required></div>
+                    <div class="gatita-form-row"><label for="customer_email">Email <span class="required">*</span></label><input type="email" id="customer_email" name="customer_email" required></div>
+                    <div class="gatita-form-row"><label for="customer_phone">Phone <span class="required">*</span></label><input type="tel" id="customer_phone" name="customer_phone" required></div>
+                </div>
+
+
+                <div class="gatita-sidebar-section">
+                    <h2>Order Method <span class="required">*</span></h2>
+                    <div class="gatita-form-row gatita-radio-group">
+                        <?php // NOTE: Default checked value controls initial JS state ?>
+                        <label><input type="radio" name="order_type" value="pickup" checked required> Pickup</label>
+                        <label><input type="radio" name="order_type" value="delivery" required> Delivery</label>
+                    </div>
+
+                     <?php //!-- NEW: Pickup Location Fields (Initially hidden by CSS/JS) --> ?>
+                    <div id="pickup-location-fields" class="gatita-form-section-dynamic">
+                        <div class="gatita-form-row">
+                             <label for="pickup_location">Pickup Location <span class="required">*</span></label>
+                             <select id="pickup_location" name="pickup_location" required>
+                                <option value="">-- Select Location --</option>
+                                <?php foreach ($pickup_locations as $key => $display_text) : ?>
+                                    <option value="<?php echo esc_attr($key); ?>"><?php echo esc_html($display_text); ?></option>
+                                <?php endforeach; ?>
+                             </select>
+                        </div>
+                        <p><small>Please adhere to the selected location's pickup times.</small></p>
+                    </div>
+
+                     <?php //!-- Delivery Address Fields (Initially hidden by CSS/JS) --> ?>
+                    <div id="delivery-address-fields" class="gatita-form-section-dynamic">
+                        <h3>Delivery Address <span class="required">*</span></h3>
+                        <p><small>(Required only if Delivery is selected)</small></p>
+                        <div class="gatita-form-row"><label for="delivery_street">Street Address</label><input type="text" id="delivery_street" name="delivery_street"></div>
+                        <div class="gatita-form-row"><label for="delivery_city">City</label><input type="text" id="delivery_city" name="delivery_city" value=""></div>
+                        <div class="gatita-form-row"><label for="delivery_zip">ZIP Code</label><input type="text" id="delivery_zip" name="delivery_zip"></div>
+                        <div class="gatita-form-row"><label for="delivery_notes">Delivery Notes (optional)</label><textarea id="delivery_notes" name="delivery_notes"></textarea></div>
+                    </div>
+
+                </div> <?php //-- End Order Method sidebar section --> ?>
+
+
+                <div class="gatita-sidebar-section gatita-submit-section">
+                    <div class="gatita-form-row gatita-submit-row">
+                        <button type="submit" class="gatita-button gatita-place-order-button">Place Order</button>
+                    </div>
+                    <p class="gatita-payment-note"><small>Payment instructions (Venmo) will be sent via email upon confirmation.</small></p>
+                </div>
+
+            </div> <?php // END: Right column ?>
+
+        </div> <?php // END: Overall wrapper ?>
+    </form>
+    <?php
+    // Combine status messages with form buffer
+    $output .= ob_get_clean();
+    return $output;
+}
+add_shortcode('gatita_bakes_order_form', 'gatita_bakes_order_form_shortcode');
+
+
+// =========================================================================
+// 5. FORM SUBMISSION HANDLER
+// =========================================================================
+function gatita_bakes_handle_form_submission() {
+
+    // Verify nonce
+    if ( ! isset( $_POST['gatita_bakes_nonce'] ) || ! wp_verify_nonce( $_POST['gatita_bakes_nonce'], 'gatita_bakes_order_nonce' ) ) { wp_safe_redirect(add_query_arg('order_status', 'error_nonce', home_url('/order'))); exit; }
+
+    // Sanitize basic info
+    $customer_name = isset( $_POST['customer_name'] ) ? sanitize_text_field( trim($_POST['customer_name']) ) : '';
+    $customer_email = isset( $_POST['customer_email'] ) ? sanitize_email( $_POST['customer_email'] ) : '';
+    $customer_phone = isset( $_POST['customer_phone'] ) ? sanitize_text_field( trim($_POST['customer_phone']) ) : '';
+    $order_type = isset( $_POST['order_type'] ) ? sanitize_key( $_POST['order_type'] ) : 'pickup';
+
+    // Initialize variables for delivery/pickup info
+    $delivery_address_html = 'N/A';
+    $pickup_location_text = 'N/A';
+    $all_locations = gatita_bakes_get_pickup_locations(); // Get locations for validation/display
+
+    // Validate required basic info
+    if ( empty($customer_name) || !is_email($customer_email) || empty($customer_phone) ) {
+        wp_safe_redirect(add_query_arg('order_status', 'error_required', home_url('/order')));
+        exit;
+    }
+
+    // --- Validate and Process Based on Order Type ---
+    if ($order_type === 'delivery') {
+        $delivery_street = isset( $_POST['delivery_street'] ) ? sanitize_text_field( trim($_POST['delivery_street']) ) : '';
+        $delivery_city = isset( $_POST['delivery_city'] ) ? sanitize_text_field( trim($_POST['delivery_city']) ) : '';
+        $delivery_zip = isset( $_POST['delivery_zip'] ) ? sanitize_text_field( trim($_POST['delivery_zip']) ) : '';
+        $delivery_notes = isset( $_POST['delivery_notes'] ) ? sanitize_textarea_field( $_POST['delivery_notes'] ) : '';
+
+        if ( empty($delivery_street) || empty($delivery_city) || empty($delivery_zip) ) {
+             wp_safe_redirect(add_query_arg('order_status', 'error_address', home_url('/order')));
+             exit;
+        }
+        $delivery_address_html = nl2br(esc_html( implode("\n", array_filter([$delivery_street, $delivery_city . ", " . $delivery_zip])) ));
+        if(!empty($delivery_notes)) { $delivery_address_html .= "<br><small>Notes: " . nl2br(esc_html($delivery_notes)) . "</small>"; }
+
+    } elseif ($order_type === 'pickup') {
+        $selected_location_key = isset( $_POST['pickup_location'] ) ? sanitize_key( $_POST['pickup_location'] ) : '';
+
+        // Validate if a valid location key was submitted
+        if ( empty($selected_location_key) || !isset($all_locations[$selected_location_key]) ) {
+            wp_safe_redirect(add_query_arg('order_status', 'error_pickup_loc', home_url('/order'))); // Specific error for pickup location
+            exit;
+        }
+        // Get the display text for the email
+        $pickup_location_text = esc_html($all_locations[$selected_location_key]);
+    }
+
+    // Process Ordered Products (remains same)
+    $products_available = gatita_bakes_get_products(); $ordered_items_data = array(); $order_items_html = ''; $order_total = 0.00;
+    if (isset($_POST['products']) && is_array($_POST['products']) && !empty($products_available)) { foreach ($_POST['products'] as $slug => $selected) { if ($selected == '1' && isset($products_available[$slug])) { $quantity = isset($_POST['quantity'][$slug]) ? intval($_POST['quantity'][$slug]) : 1; if ($quantity < 1) $quantity = 1; $product = $products_available[$slug];
+        if ( isset($product['price']) && is_numeric($product['price']) ) { $item_total = (float)$product['price'] * $quantity; $order_total += $item_total; $item_name = isset($product['name']) ? $product['name'] : $slug; $ordered_items_data[] = array( 'name' => $item_name, 'quantity' => $quantity, 'price_per_item' => (float)$product['price'], 'item_total' => $item_total ); $order_items_html .= "<tr><td style='padding: 8px; border: 1px solid #ddd;'>" . esc_html($item_name) . "</td><td style='padding: 8px; border: 1px solid #ddd; text-align: center;'>" . esc_html($quantity) . "</td><td style='padding: 8px; border: 1px solid #ddd; text-align: right;'>$" . esc_html(number_format($item_total, 2)) . "</td></tr>"; } } } }
+    if (empty($ordered_items_data)) { wp_safe_redirect(add_query_arg('order_status', 'error_noitems', home_url('/order'))); exit; }
+
+    // Prepare Email
+    $admin_email = get_option('admin_email'); $email_subject = 'New Gatita Bakes Order Confirmation - ' . $customer_name; $customer_email_subject = 'Your Gatita Bakes Order Confirmation';
+    $email_template_path = GATITA_BAKES_PLUGIN_DIR . 'email-templates.php';
+    if ( file_exists( $email_template_path ) ) {
+        ob_start();
+        // --- Define variables needed by the email template ---
+        $email_customer_name = $customer_name;
+        $email_customer_email = $customer_email;
+        $email_customer_phone = $customer_phone;
+        $email_order_type = ucfirst($order_type);
+        // ** NEW/MODIFIED: Pass EITHER delivery address OR pickup location **
+        $email_delivery_address_html = ($order_type === 'delivery') ? $delivery_address_html : 'N/A';
+        $email_pickup_location_text = ($order_type === 'pickup') ? $pickup_location_text : 'N/A';
+        // Order items and total remain the same
+        $email_order_items_html = $order_items_html;
+        $email_order_total = number_format($order_total, 2);
+
+        include $email_template_path;
+        $email_body = ob_get_clean();
+
+        // Send Emails
+        $headers = array('Content-Type: text/html; charset=UTF-8'); $from_name = 'Gatita Bakes'; $from_email = $admin_email; $headers[] = 'From: ' . $from_name . ' <' . $from_email . '>';
+        wp_mail( $admin_email, $email_subject, $email_body, $headers );
+        wp_mail( $customer_email, $customer_email_subject, $email_body, $headers );
+
+    } else { wp_safe_redirect(add_query_arg('order_status', 'error_email_template', home_url('/order'))); exit; }
+
+    // Redirect after successful submission
+    wp_safe_redirect( add_query_arg('order_status', 'success', home_url('/order')) ); exit;
+}
+add_action( 'admin_post_nopriv_gatita_bakes_submit_order', 'gatita_bakes_handle_form_submission' );
+add_action( 'admin_post_gatita_bakes_submit_order', 'gatita_bakes_handle_form_submission' );
+
+?>
