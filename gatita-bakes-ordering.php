@@ -3,7 +3,7 @@
  * Plugin Name:       Gatita Bakes Ordering
  * Plugin URI:        https://www.gatitabakes.com/
  * Description:       Custom ordering system for Gatita Bakes artisan bread and bagels. Allows pickup/delivery orders and sends Venmo payment instructions via email.
- * Version:           1.4.0  // Updated version number for dynamic form logic
+ * Version:           1.4.0
  * Author:            Your Name / Michael
  * Author URI:        https://www.gatitabakes.com/
  * License:           GPL v2 or later
@@ -36,7 +36,7 @@ function gatita_bakes_enqueue_assets() {
     }
 
     // --- Plugin's Custom JS (Slider + Form Logic) ---
-    $form_js_path = GATITA_BAKES_PLUGIN_DIR . 'assets/gatita-bakes-slider.js'; // Renamed slightly for clarity, but keeping filename for now
+    $form_js_path = GATITA_BAKES_PLUGIN_DIR . 'assets/gatita-bakes-slider.js';
     if ( file_exists( $form_js_path ) ) {
          $js_version = filemtime( $form_js_path );
          wp_enqueue_script(
@@ -53,8 +53,8 @@ add_action( 'wp_enqueue_scripts', 'gatita_bakes_enqueue_assets' );
 // =========================================================================
 // 2. DEFINE PRODUCTS & PICKUP LOCATIONS
 // =========================================================================
-// ** IMPORTANT **: Verify 'image' filenames match files in /images/ folder (CASE-SENSITIVE)
 function gatita_bakes_get_products() {
+    // ** IMPORTANT **: Verify 'image' filenames match files in /images/ folder (CASE-SENSITIVE)
     return array(
         'plain-sourdough' => array('name' => 'Plain Sourdough Loaf', 'description' => 'Classic tangy sourdough with a chewy crust.', 'price' => 8.00, 'image' => 'Plain-Sourdough-Loaf.jpg'),
         'rosemary-sourdough' => array('name' => 'Rosemary Sourdough Loaf', 'description' => 'Infused with fresh rosemary for an aromatic flavor.', 'price' => 9.00, 'image' => 'Rosemary-Sourdough-Loaf.png'),
@@ -65,26 +65,32 @@ function gatita_bakes_get_products() {
     );
 }
 
-// ** NEW: Define Pickup Locations **
-// Key => Display Text
-// This could later come from WP Options or another source
 function gatita_bakes_get_pickup_locations() {
+    // ** IMPORTANT **: Update these with your actual locations and details
     return array(
         'main_bakery' => 'Main Bakery (123 Bread Lane, Mon-Fri 10am-4pm)',
         'farmers_market' => 'Saturday Farmers Market (Downtown Park, 8am-12pm)',
         'eastside_cafe' => 'Eastside Cafe Partnership (456 Coffee St, Wed ONLY 11am-2pm)',
-        // Add more locations here
     );
 }
 
 
 // =========================================================================
-// 3. LANDING PAGE SHORTCODE [gatita_bakes_landing] (No change here)
+// 3. LANDING PAGE SHORTCODE [gatita_bakes_landing]
 // =========================================================================
-function gatita_bakes_landing_page_shortcode() { /* ... Landing page code remains same ... */
+function gatita_bakes_landing_page_shortcode() {
     ob_start();
-    $hero_image_url = GATITA_BAKES_PLUGIN_URL . 'images/hero-page-fullpage.png'; $tagline = "The smell of fresh bread is the best kind of welcome.";
-    ?> <div class="gatita-hero-section"><div class="gatita-hero-content"><h1>Gatita Bakes</h1><p><?php echo esc_html($tagline); ?></p><a href="<?php echo esc_url(home_url('/order')); ?>" class="gatita-button">Order Now</a></div></div> <?php
+    $hero_image_url = GATITA_BAKES_PLUGIN_URL . 'images/hero-page-fullpage.png';
+    $tagline = "The smell of fresh bread is the best kind of welcome.";
+    ?>
+    <div class="gatita-hero-section">
+        <div class="gatita-hero-content">
+            <h1>Gatita Bakes</h1>
+            <p><?php echo esc_html($tagline); ?></p>
+            <a href="<?php echo esc_url(home_url('/order')); ?>" class="gatita-button">Order Now</a>
+        </div>
+    </div>
+    <?php
     return ob_get_clean();
 }
 add_shortcode('gatita_bakes_landing', 'gatita_bakes_landing_page_shortcode');
@@ -96,13 +102,13 @@ add_shortcode('gatita_bakes_landing', 'gatita_bakes_landing_page_shortcode');
 function gatita_bakes_order_form_shortcode() {
     // --- Display Status Messages ---
     $output = '';
-    if ( isset( $_GET['order_status'] ) ) { /* ... (status message logic remains same) ... */
+    if ( isset( $_GET['order_status'] ) ) {
         if ( $_GET['order_status'] === 'success' ) { $output .= "<div class='gatita-notice gatita-notice-success'>Thank you for your order! Please check your email for confirmation and payment instructions.</div>"; }
-        elseif ( strpos($_GET['order_status'], 'error') === 0 ) { $error_message = 'Sorry, there was an error processing your order. Please check your details and try again or contact us directly.'; $output .= "<div class='gatita-notice gatita-notice-error'>" . esc_html($error_message) . "</div>"; }
+        elseif ( strpos($_GET['order_status'], 'error') === 0 ) { $error_message = 'Sorry, there was an error processing your order. Please check your details and try again or contact us directly.'; /* Add more specific messages? */ $output .= "<div class='gatita-notice gatita-notice-error'>" . esc_html($error_message) . "</div>"; }
     }
 
     $products = gatita_bakes_get_products();
-    $pickup_locations = gatita_bakes_get_pickup_locations(); // Get pickup locations
+    $pickup_locations = gatita_bakes_get_pickup_locations();
 
     // --- Start Form Output ---
     ob_start();
@@ -148,12 +154,11 @@ function gatita_bakes_order_form_shortcode() {
                 <div class="gatita-sidebar-section">
                     <h2>Order Method <span class="required">*</span></h2>
                     <div class="gatita-form-row gatita-radio-group">
-                        <?php // NOTE: Default checked value controls initial JS state ?>
                         <label><input type="radio" name="order_type" value="pickup" checked required> Pickup</label>
                         <label><input type="radio" name="order_type" value="delivery" required> Delivery</label>
                     </div>
 
-                     <?php //!-- NEW: Pickup Location Fields (Initially hidden by CSS/JS) --> ?>
+                     <?php // Pickup Location Fields (Initially hidden) ?>
                     <div id="pickup-location-fields" class="gatita-form-section-dynamic">
                         <div class="gatita-form-row">
                              <label for="pickup_location">Pickup Location <span class="required">*</span></label>
@@ -167,7 +172,7 @@ function gatita_bakes_order_form_shortcode() {
                         <p><small>Please adhere to the selected location's pickup times.</small></p>
                     </div>
 
-                     <?php //!-- Delivery Address Fields (Initially hidden by CSS/JS) --> ?>
+                     <?php // Delivery Address Fields (Initially hidden) ?>
                     <div id="delivery-address-fields" class="gatita-form-section-dynamic">
                         <h3>Delivery Address <span class="required">*</span></h3>
                         <p><small>(Required only if Delivery is selected)</small></p>
@@ -213,44 +218,25 @@ function gatita_bakes_handle_form_submission() {
     $customer_phone = isset( $_POST['customer_phone'] ) ? sanitize_text_field( trim($_POST['customer_phone']) ) : '';
     $order_type = isset( $_POST['order_type'] ) ? sanitize_key( $_POST['order_type'] ) : 'pickup';
 
-    // Initialize variables for delivery/pickup info
     $delivery_address_html = 'N/A';
     $pickup_location_text = 'N/A';
-    $all_locations = gatita_bakes_get_pickup_locations(); // Get locations for validation/display
+    $all_locations = gatita_bakes_get_pickup_locations();
 
     // Validate required basic info
-    if ( empty($customer_name) || !is_email($customer_email) || empty($customer_phone) ) {
-        wp_safe_redirect(add_query_arg('order_status', 'error_required', home_url('/order')));
-        exit;
-    }
+    if ( empty($customer_name) || !is_email($customer_email) || empty($customer_phone) ) { wp_safe_redirect(add_query_arg('order_status', 'error_required', home_url('/order'))); exit; }
 
     // --- Validate and Process Based on Order Type ---
     if ($order_type === 'delivery') {
-        $delivery_street = isset( $_POST['delivery_street'] ) ? sanitize_text_field( trim($_POST['delivery_street']) ) : '';
-        $delivery_city = isset( $_POST['delivery_city'] ) ? sanitize_text_field( trim($_POST['delivery_city']) ) : '';
-        $delivery_zip = isset( $_POST['delivery_zip'] ) ? sanitize_text_field( trim($_POST['delivery_zip']) ) : '';
-        $delivery_notes = isset( $_POST['delivery_notes'] ) ? sanitize_textarea_field( $_POST['delivery_notes'] ) : '';
-
-        if ( empty($delivery_street) || empty($delivery_city) || empty($delivery_zip) ) {
-             wp_safe_redirect(add_query_arg('order_status', 'error_address', home_url('/order')));
-             exit;
-        }
-        $delivery_address_html = nl2br(esc_html( implode("\n", array_filter([$delivery_street, $delivery_city . ", " . $delivery_zip])) ));
-        if(!empty($delivery_notes)) { $delivery_address_html .= "<br><small>Notes: " . nl2br(esc_html($delivery_notes)) . "</small>"; }
-
+        $delivery_street = isset( $_POST['delivery_street'] ) ? sanitize_text_field( trim($_POST['delivery_street']) ) : ''; $delivery_city = isset( $_POST['delivery_city'] ) ? sanitize_text_field( trim($_POST['delivery_city']) ) : ''; $delivery_zip = isset( $_POST['delivery_zip'] ) ? sanitize_text_field( trim($_POST['delivery_zip']) ) : ''; $delivery_notes = isset( $_POST['delivery_notes'] ) ? sanitize_textarea_field( $_POST['delivery_notes'] ) : '';
+        if ( empty($delivery_street) || empty($delivery_city) || empty($delivery_zip) ) { wp_safe_redirect(add_query_arg('order_status', 'error_address', home_url('/order'))); exit; }
+        $delivery_address_html = nl2br(esc_html( implode("\n", array_filter([$delivery_street, $delivery_city . ", " . $delivery_zip])) )); if(!empty($delivery_notes)) { $delivery_address_html .= "<br><small>Notes: " . nl2br(esc_html($delivery_notes)) . "</small>"; }
     } elseif ($order_type === 'pickup') {
         $selected_location_key = isset( $_POST['pickup_location'] ) ? sanitize_key( $_POST['pickup_location'] ) : '';
-
-        // Validate if a valid location key was submitted
-        if ( empty($selected_location_key) || !isset($all_locations[$selected_location_key]) ) {
-            wp_safe_redirect(add_query_arg('order_status', 'error_pickup_loc', home_url('/order'))); // Specific error for pickup location
-            exit;
-        }
-        // Get the display text for the email
+        if ( empty($selected_location_key) || !isset($all_locations[$selected_location_key]) ) { wp_safe_redirect(add_query_arg('order_status', 'error_pickup_loc', home_url('/order'))); exit; }
         $pickup_location_text = esc_html($all_locations[$selected_location_key]);
     }
 
-    // Process Ordered Products (remains same)
+    // Process Ordered Products
     $products_available = gatita_bakes_get_products(); $ordered_items_data = array(); $order_items_html = ''; $order_total = 0.00;
     if (isset($_POST['products']) && is_array($_POST['products']) && !empty($products_available)) { foreach ($_POST['products'] as $slug => $selected) { if ($selected == '1' && isset($products_available[$slug])) { $quantity = isset($_POST['quantity'][$slug]) ? intval($_POST['quantity'][$slug]) : 1; if ($quantity < 1) $quantity = 1; $product = $products_available[$slug];
         if ( isset($product['price']) && is_numeric($product['price']) ) { $item_total = (float)$product['price'] * $quantity; $order_total += $item_total; $item_name = isset($product['name']) ? $product['name'] : $slug; $ordered_items_data[] = array( 'name' => $item_name, 'quantity' => $quantity, 'price_per_item' => (float)$product['price'], 'item_total' => $item_total ); $order_items_html .= "<tr><td style='padding: 8px; border: 1px solid #ddd;'>" . esc_html($item_name) . "</td><td style='padding: 8px; border: 1px solid #ddd; text-align: center;'>" . esc_html($quantity) . "</td><td style='padding: 8px; border: 1px solid #ddd; text-align: right;'>$" . esc_html(number_format($item_total, 2)) . "</td></tr>"; } } } }
@@ -261,17 +247,10 @@ function gatita_bakes_handle_form_submission() {
     $email_template_path = GATITA_BAKES_PLUGIN_DIR . 'email-templates.php';
     if ( file_exists( $email_template_path ) ) {
         ob_start();
-        // --- Define variables needed by the email template ---
-        $email_customer_name = $customer_name;
-        $email_customer_email = $customer_email;
-        $email_customer_phone = $customer_phone;
-        $email_order_type = ucfirst($order_type);
-        // ** NEW/MODIFIED: Pass EITHER delivery address OR pickup location **
-        $email_delivery_address_html = ($order_type === 'delivery') ? $delivery_address_html : 'N/A';
-        $email_pickup_location_text = ($order_type === 'pickup') ? $pickup_location_text : 'N/A';
-        // Order items and total remain the same
-        $email_order_items_html = $order_items_html;
-        $email_order_total = number_format($order_total, 2);
+        // Define variables needed by the email template
+        $email_customer_name = $customer_name; $email_customer_email = $customer_email; $email_customer_phone = $customer_phone; $email_order_type = ucfirst($order_type);
+        $email_delivery_address_html = ($order_type === 'delivery') ? $delivery_address_html : 'N/A'; $email_pickup_location_text = ($order_type === 'pickup') ? $pickup_location_text : 'N/A';
+        $email_order_items_html = $order_items_html; $email_order_total = number_format($order_total, 2);
 
         include $email_template_path;
         $email_body = ob_get_clean();
