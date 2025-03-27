@@ -1,5 +1,5 @@
 // assets/gatita-bakes-slider.js
-// Version: 1.4.2 (Remove setTimeout, rely on observers, add window.onload update)
+// Version: 1.4.3 (Refined window.onload update, observer reliance)
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -22,18 +22,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // Rely on observers to handle changes after initial load
         observer: true,
         observeParents: true,
-        observeSlideChildren: true,
-        // Ensure slides are ready before calculating (can sometimes help)
-        // watchSlidesProgress: true,
+        observeSlideChildren: true, // Observe changes within slides too
       });
     } catch (error) {
-      console.error("Error initializing Swiper:", error);
+      console.error("Gatita Bakes: Error initializing Swiper:", error);
     }
   } else {
-    // console.log("Swiper container '.gatita-product-slider' not found.");
+    // console.log("Gatita Bakes: Swiper container '.gatita-product-slider' not found.");
   }
 
-  // --- Dynamic Form Logic (Keep as is) ---
+  // --- Dynamic Form Logic (Unchanged) ---
   const orderTypeRadios = document.querySelectorAll('input[name="order_type"]');
   const pickupFields = document.getElementById('pickup-location-fields');
   const deliveryFields = document.getElementById('delivery-address-fields');
@@ -53,23 +51,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (form && orderTypeRadios.length > 0 && pickupFields && deliveryFields) {
     orderTypeRadios.forEach(radio => { radio.addEventListener('change', toggleOrderFields); });
-    toggleOrderFields();
+    toggleOrderFields(); // Initial call
   }
 
-  // --- NEW: Add event listener for window.onload ---
+  // --- Add event listener for window.onload ---
   window.addEventListener('load', function() {
-      // Force Swiper update after all resources (images etc.) are loaded
-      if (swiperInstance && typeof swiperInstance.update === 'function') {
-          // console.log("Forcing Swiper update on window.load"); // Uncomment for debugging
-          swiperInstance.update();
-      }
-      // Small delay after load, just in case
-      setTimeout(function() {
-          if (swiperInstance && typeof swiperInstance.update === 'function') {
-             swiperInstance.update();
-          }
-      }, 100);
-  });
+    // Force Swiper update after ALL resources (images etc.) are loaded
+    // Check if instance exists and has the update method
+    if (swiperInstance && typeof swiperInstance.update === 'function' && !swiperInstance.destroyed) {
+        // console.log("Gatita Bakes: Forcing Swiper update on window.load");
+        swiperInstance.update();
 
+        // Maybe a tiny delay *after* load just in case of final reflows
+        setTimeout(function() {
+            if (swiperInstance && typeof swiperInstance.update === 'function' && !swiperInstance.destroyed) {
+                // console.log("Gatita Bakes: Second Swiper update after window.load delay");
+                 swiperInstance.update();
+            }
+        }, 150); // Shorter delay after window.load
+    }
+  });
 
 }); // End DOMContentLoaded
