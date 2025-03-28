@@ -124,19 +124,37 @@ $font_family = 'Arial, Helvetica, sans-serif';
                                 <?php //!--- END: Conditional Pickup/Delivery Info --- ?>
 
                             </table>
+                            
+                    <?php // --- PAYMENT INSTRUCTIONS SECTION --- ?>
+                    <tr>
+                        <td class="body-content" style="padding-top: 30px;"> <?php // Added padding-top here if needed ?>
+                            <h2 style="color: <?php echo $brand_color; ?>; margin-top: 0; margin-bottom: 15px;">Payment Instructions</h2>
+                            <p>Please complete your payment of <strong>$<?php echo esc_html($email_order_total); ?></strong> via Venmo.</p>
+                            <p>You can find us at Venmo username: <strong>@karlathesourdoughstarta</strong></p> <?php // Username inserted here ?>
 
-                            <h2 style="color: <?php echo $brand_color; ?>; margin-top: 30px; margin-bottom: 15px;">Payment Instructions</h2>
-                            <p>Please complete your payment via Venmo. Click the button below or scan our QR code (if you have one to insert here).</p>
-                            <p><strong>Venmo Username:</strong> @YourVenmoHandle</p> <?php //!-- IMPORTANT: Replace with your actual Venmo handle -->
-                            <p style="text-align: center;">
-                                <a href="https://venmo.com/YourVenmoHandle?txn=pay&amount=<?php echo esc_attr($email_order_total); ?>¬e=GatitaBakesOrder_<?php echo esc_attr($email_customer_name); ?>" target="_blank" class="venmo-button">Pay $<?php echo esc_html($email_order_total); ?> on Venmo</a>
-                                <?php //!-- IMPORTANT: Replace YourVenmoHandle in URL -->
+                            <p style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+                                <?php
+                                // Prepare URL components - Using urlencode for robustness in parameters
+                                $venmo_username = 'karlathesourdoughstarta'; // The actual username without @
+                                $venmo_amount = $email_order_total; // Raw total, esc_attr applied in href
+                                $venmo_note = 'GatitaBakesOrder ' . $email_customer_name; // Basic note
+                                $venmo_url = sprintf(
+                                    'https://venmo.com/%s?txn=pay&amount=%s¬e=%s',
+                                    $venmo_username,
+                                    esc_attr($venmo_amount), // Use esc_attr for amount in URL attribute
+                                    urlencode($venmo_note) // Use urlencode for the note content
+                                );
+                                ?>
+                                <a href="<?php echo $venmo_url; ?>" target="_blank" class="venmo-button" style="display: inline-block; background-color: #0074de; color: #ffffff !important; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                                    Pay $<?php echo esc_html($email_order_total); ?> on Venmo
+                                </a>
                             </p>
                             <p>Please include your name or order details in the Venmo note if possible.</p>
                             <p>We'll confirm once payment is received. Thanks again for supporting Gatita Bakes!</p>
                             <p style="margin-top: 30px; font-style: italic; text-align: center;">"The smell of fresh bread is the best kind of welcome."</p>
                         </td>
                     </tr>
+                    <?php // --- END PAYMENT INSTRUCTIONS SECTION --- ?>
                     <!-- Footer -->
                     <tr>
                         <td class="footer">

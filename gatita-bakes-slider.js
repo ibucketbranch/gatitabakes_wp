@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (form && orderTypeRadios.length > 0 && pickupFields && deliveryFields) {
     orderTypeRadios.forEach(radio => { radio.addEventListener('change', toggleOrderFields); });
-    toggleOrderFields(); // Initial call
+    toggleOrderFields();
   }
 
   // --- Add event listener for window.onload ---
