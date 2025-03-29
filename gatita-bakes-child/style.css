@@ -1,0 +1,21 @@
+/*
+Theme Name: Gatita Bakes Child
+Template: astra
+Author: Katerina
+Description: A child theme for Astra, customized for Gatita Bakes.
+Version: 1.0
+*/
+
+@import url("../astra/style.css"); /* Import Parent Theme Styles */
+
+/* Custom Styles */
+body {
+    font-family: 'Times New Roman', serif;
+}
+
+/* Fix product descriptions overlapping */
+.gatita-product-description {
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+}
