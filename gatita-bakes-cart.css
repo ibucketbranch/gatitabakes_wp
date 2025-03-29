@@ -1,0 +1,334 @@
+/**
+ ** Plugin Name:       Gatita Bakes Ordering       ** Filename: gatita-bakes-cart.css
+ * Plugin URI:        https://www.gatitabakes.com/
+ * Description:       Gatita Bakes Shopping Cart Styles
+ * Version:           1.5
+ * Author:            Bucketbranch
+ * Author URI:        https://www.gatitabakes.com/
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       gatita-bakes-ordering
+ */
+
+/* =========================================================================
+   Gatita Bakes Shopping Cart Styles v1.5 // New Cart Layout
+   ========================================================================= */
+
+/* --- Brand Colors (Keeping your existing palette) --- */
+:root {
+    --gatita-brand-primary: #e5a98c;
+    --gatita-brand-secondary: #8b7a70;
+    --gatita-brand-dark: #5a4e46;
+    --gatita-brand-background: #fdfaf7;
+    --gatita-brand-light-grey: #f9f9f9;
+    --gatita-brand-border: #e0dcd8;
+    --gatita-text-main: #333333;
+    --gatita-text-light: #555555;
+    --gatita-focus-ring: rgba(229, 169, 140, 0.3);
+}
+
+/* --- Shopping Cart Page Title --- */
+.gatita-cart-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 30px 0;
+    color: var(--gatita-brand-dark);
+}
+
+/* --- Shipping Notification --- */
+.gatita-shipping-notification {
+    display: flex;
+    align-items: center;
+    background-color: #f7f7f7;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.gatita-notification-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #333;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.gatita-notification-text strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.gatita-notification-text p {
+    margin: 0;
+}
+
+/* --- Shipping Information --- */
+.gatita-shipping-info {
+    display: flex;
+    align-items: center;
+    background-color: #f7f7f7;
+    padding: 15px;
+    margin-bottom: 30px;
+    border-radius: 4px;
+}
+
+.gatita-truck-icon {
+    margin-right: 15px;
+    font-size: 20px;
+}
+
+.gatita-shipping-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+/* --- Cart Items --- */
+.gatita-cart-items {
+    margin-bottom: 30px;
+}
+
+.gatita-cart-item {
+    display: flex;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--gatita-brand-border);
+}
+
+.gatita-product-image {
+    width: 120px;
+    margin-right: 20px;
+}
+
+.gatita-product-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.gatita-product-details {
+    flex: 1;
+}
+
+.gatita-product-details h3 {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    color: var(--gatita-brand-dark);
+}
+
+.gatita-product-price {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: var(--gatita-brand-secondary);
+}
+
+.gatita-quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Quantity buttons */
+.gatita-quantity-decrease,
+.gatita-quantity-increase {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--gatita-brand-border);
+    background-color: #f5f5f5;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.gatita-quantity-input {
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid var(--gatita-brand-border);
+    border-radius: 4px;
+}
+
+.gatita-remove-item {
+    margin-left: auto;
+    background-color: transparent;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+.gatita-remove-item:hover {
+    color: #d9534f;
+}
+
+/* --- Product Selection --- */
+.gatita-product-selection {
+    margin-bottom: 50px;
+}
+
+.gatita-add-to-cart {
+    background-color: var(--gatita-brand-primary);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.gatita-add-to-cart:hover {
+    background-color: var(--gatita-brand-secondary);
+}
+
+/* --- Samples Section --- */
+.gatita-samples-section {
+    margin: 40px 0;
+}
+
+.gatita-samples-section h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: var(--gatita-brand-dark);
+}
+
+.gatita-samples-remaining {
+    text-align: center;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.gatita-samples-info {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--gatita-text-light);
+}
+
+.gatita-samples-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    border: 1px solid #000;
+    padding: 15px;
+}
+
+@media (max-width: 768px) {
+    .gatita-samples-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.gatita-sample-item {
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: transform 0.3s, border-color 0.3s;
+}
+
+.gatita-sample-item:hover {
+    transform: translateY(-3px);
+}
+
+.gatita-sample-item.selected {
+    border: 2px solid var(--gatita-brand-primary);
+    background-color: rgba(229, 169, 140, 0.1);
+}
+
+.gatita-sample-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.gatita-sample-name {
+    font-size: 12px;
+    color: var(--gatita-text-main);
+}
+
+/* --- Order Summary --- */
+.gatita-promo-code {
+    margin-bottom: 20px;
+}
+
+.gatita-promo-code label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--gatita-text-main);
+}
+
+.gatita-promo-input {
+    display: flex;
+}
+
+.gatita-promo-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--gatita-brand-border);
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+}
+
+.gatita-apply-promo {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.gatita-order-totals {
+    margin-bottom: 25px;
+}
+
+.gatita-total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px 0;
+}
+
+.gatita-order-total {
+    font-weight: 700;
+    font-size: 18px;
+    border-top: 1px solid var(--gatita-brand-border);
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.gatita-payment-options {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gatita-brand-border);
+}
+
+.gatita-afterpay-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.gatita-afterpay-option img {
+    height: 20px;
+}
+
+.gatita-afterpay-option span {
+    font-size: 12px;
+    color: #666;
+}
