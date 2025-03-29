@@ -28,6 +28,12 @@ $font_family = 'Arial, Helvetica, sans-serif';
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
+<!-- Add this to your email template header section -->
+<h1>Gatita Bakes Order #<span class="order-number"><?php echo esc_html($email_order_number); ?></span></h1>
+
+<!-- Replace existing email header with this -->
+<h2 style="color: <?php echo $brand_color; ?>; margin-top: 30px; margin-bottom: 15px;">Order #<?php echo esc_html($email_order_number); ?> Summary</h2>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Gatita Bakes Order</title>
@@ -125,36 +131,35 @@ $font_family = 'Arial, Helvetica, sans-serif';
 
                             </table>
                             
-                    <?php // --- PAYMENT INSTRUCTIONS SECTION --- ?>
-                    <tr>
-                        <td class="body-content" style="padding-top: 30px;"> <?php // Added padding-top here if needed ?>
-                            <h2 style="color: <?php echo $brand_color; ?>; margin-top: 0; margin-bottom: 15px;">Payment Instructions</h2>
+                            <h2 style="color: <?php echo $brand_color; ?>; margin-top: 30px; margin-bottom: 15px;">Payment Instructions</h2>
                             <p>Please complete your payment of <strong>$<?php echo esc_html($email_order_total); ?></strong> via Venmo.</p>
-                            <p>You can find us at Venmo username: <strong>@karlathesourdoughstarta</strong></p> <?php // Username inserted here ?>
-
+                            <p>You can find us at Venmo username: <strong>@karlathesourdoughstarta</strong></p> 
+                            
                             <p style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
                                 <?php
-                                // Prepare URL components - Using urlencode for robustness in parameters
+                                // Prepare URL components
                                 $venmo_username = 'karlathesourdoughstarta'; // The actual username without @
-                                $venmo_amount = $email_order_total; // Raw total, esc_attr applied in href
+                                $venmo_amount = $email_order_total; // Raw total
                                 $venmo_note = 'GatitaBakesOrder ' . $email_customer_name; // Basic note
                                 $venmo_url = sprintf(
-                                    'https://venmo.com/%s?txn=pay&amount=%s¬e=%s',
+                                    'https://venmo.com/%s?txn=pay&amount=%s&note=%s',
                                     $venmo_username,
-                                    esc_attr($venmo_amount), // Use esc_attr for amount in URL attribute
-                                    urlencode($venmo_note) // Use urlencode for the note content
+                                    esc_attr($venmo_amount),
+                                    urlencode($venmo_note)
                                 );
                                 ?>
                                 <a href="<?php echo $venmo_url; ?>" target="_blank" class="venmo-button" style="display: inline-block; background-color: #0074de; color: #ffffff !important; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">
                                     Pay $<?php echo esc_html($email_order_total); ?> on Venmo
                                 </a>
                             </p>
+                            
                             <p>Please include your name or order details in the Venmo note if possible.</p>
                             <p>We'll confirm once payment is received. Thanks again for supporting Gatita Bakes!</p>
+                            <p>If you have any questions, please contact us at <a href="mailto:gatitabakestest@bucketbranch.com">gatitabakestest@bucketbranch.com</a>.</p>
                             <p style="margin-top: 30px; font-style: italic; text-align: center;">"The smell of fresh bread is the best kind of welcome."</p>
+                                                        
                         </td>
                     </tr>
-                    <?php // --- END PAYMENT INSTRUCTIONS SECTION --- ?>
                     <!-- Footer -->
                     <tr>
                         <td class="footer">

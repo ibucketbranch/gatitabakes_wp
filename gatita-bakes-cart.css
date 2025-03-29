@@ -1,0 +1,215 @@
+/**
+ ** Plugin Name:       Gatita Bakes Ordering       
+ * Filename: gatita-bakes-cart.js
+ * Plugin URI:        https://www.gatitabakes.com/
+ * Description:       Shopping cart functionality for order form
+ * Version:           1.5.1
+ * Author:            Bucketbranch
+ * Author URI:        https://www.gatitabakes.com/
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       gatita-bakes-ordering
+ */
+
+jQuery(document).ready(function($) {
+    // Initialize cart functionality
+    const cart = {
+        items: {},
+        
+        // Add item to cart
+        addItem: function(productId) {
+            // Check if item already exists in cart
+            if (this.items[productId]) {
+                this.items[productId].quantity++;
+            } else {
+                const productCard = $(`.gatita-product-card button[data-product="${productId}"]`).closest('.gatita-product-card');
+                const productName = productCard.find('h3').text();
+                const productPrice = parseFloat(productCard.find('.price').text().replace('$', ''));
+                
+                this.items[productId] = {
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    quantity: 1
+                };
+            }
+            
+            this.updateCartUI();
+            this.updateTotals();
+        },
+        
+        // Remove item from cart
+        removeItem: function(productId) {
+            if (this.items[productId]) {
+                delete this.items[productId];
+                this.updateCartUI();
+                this.updateTotals();
+            }
+        },
+        
+        // Update item quantity
+        updateQuantity: function(productId, quantity) {
+            if (this.items[productId]) {
+                this.items[productId].quantity = Math.max(1, parseInt(quantity) || 1);
+                this.updateCartUI();
+                this.updateTotals();
+            }
+        },
+        
+        // Update the cart UI
+        updateCartUI: function() {
+            // Update cart item count
+            let totalQuantity = 0;
+            
+            Object.values(this.items).forEach(item => {
+                totalQuantity += item.quantity;
+                
+                // Update or show the cart item
+                const cartItemEl = $(`#cart-item-${item.id}`);
+                if (cartItemEl.length) {
+                    cartItemEl.show();
+                    const quantityInput = cartItemEl.find('.gatita-quantity-input');
+                    if (quantityInput.length) {
+                        quantityInput.val(item.quantity);
+                    }
+                }
+            });
+            
+            // Update the total quantity in the title
+            $('#cart-item-count').text(totalQuantity);
+            
+            // Hide removed items
+            $('.gatita-cart-item').each(function() {
+                const productId = $(this).data('product-id');
+                if (!cart.items[productId]) {
+                    $(this).hide();
+                }
+            });
+        },
+        
+        // Calculate and update order totals
+        updateTotals: function() {
+            let subtotal = 0;
+            
+            Object.values(this.items).forEach(item => {
+                subtotal += item.price * item.quantity;
+            });
+            
+            const taxRate = 0.0; // Update as needed
+            const tax = subtotal * taxRate;
+            const total = subtotal + tax;
+            
+            // Update total displays
+            $('.gatita-subtotal-amount').text('$' + subtotal.toFixed(2));
+            $('.gatita-tax-amount').text('$' + tax.toFixed(2));
+            $('.gatita-total-amount').text('$' + total.toFixed(2));
+        }
+    };
+    
+    // Event Listeners
+    
+    // Add to cart buttons
+    $('.gatita-add-to-cart').click(function() {
+        const productId = $(this).data('product');
+        cart.addItem(productId);
+    });
+    
+    // Quantity decrease in cart
+    $(document).on('click', '.gatita-quantity-decrease', function() {
+        const cartItem = $(this).closest('.gatita-cart-item');
+        const productId = cartItem.data('product-id');
+        const quantityInput = cartItem.find('.gatita-quantity-input');
+        const currentQty = parseInt(quantityInput.val());
+        
+        if (currentQty > 1) {
+            cart.updateQuantity(productId, currentQty - 1);
+        }
+    });
+    
+    // Quantity increase in cart
+    $(document).on('click', '.gatita-quantity-increase', function() {
+        const cartItem = $(this).closest('.gatita-cart-item');
+        const productId = cartItem.data('product-id');
+        const quantityInput = cartItem.find('.gatita-quantity-input');
+        const currentQty = parseInt(quantityInput.val());
+        
+        cart.updateQuantity(productId, currentQty + 1);
+    });
+    
+    // Quantity input changes
+    $(document).on('change', '.gatita-quantity-input', function() {
+        const cartItem = $(this).closest('.gatita-cart-item');
+        const productId = cartItem.data('product-id');
+        cart.updateQuantity(productId, $(this).val());
+    });
+    
+    // Remove item from cart
+    $(document).on('click', '.gatita-remove-item', function() {
+        const cartItem = $(this).closest('.gatita-cart-item');
+        const productId = cartItem.data('product-id');
+        cart.removeItem(productId);
+    });
+    
+    // Apply promo code
+    $('#apply-promo').click(function() {
+        const promoCode = $('#promo_code').val().trim();
+        if (promoCode) {
+            alert('Promo code applied: ' + promoCode);
+            // Add actual promo code logic here
+            cart.updateTotals();
+        } else {
+            alert('Please enter a promo code');
+        }
+    });
+    
+    // Order type toggle (pickup/delivery)
+    $('input[name="order_type"]').on('change', function() {
+        const selectedType = $('input[name="order_type"]:checked').val();
+        
+        if (selectedType === 'pickup') {
+            $('#pickup-location-fields').addClass('visible');
+            $('#delivery-address-fields').removeClass('visible');
+            
+            // Toggle required attributes
+            $('#pickup_location').prop('required', true);
+            $('#delivery_street, #delivery_city, #delivery_zip').prop('required', false);
+        } else if (selectedType === 'delivery') {
+            $('#pickup-location-fields').removeClass('visible');
+            $('#delivery-address-fields').addClass('visible');
+            
+            // Toggle required attributes
+            $('#pickup_location').prop('required', false);
+            $('#delivery_street, #delivery_city, #delivery_zip').prop('required', true);
+        }
+    });
+    
+    // Initialize order type fields
+    $('input[name="order_type"]:checked').trigger('change');
+    
+    // Form validation before submission
+    $('#gatita-order-form').on('submit', function(e) {
+        const itemCount = Object.keys(cart.items).length;
+        if (itemCount === 0) {
+            e.preventDefault();
+            alert('Please add at least one item to your cart before proceeding.');
+        }
+    });
+    
+    // Additional Swiper initialization
+    if (typeof Swiper !== 'undefined') {
+        new Swiper('.gatita-product-slider', {
+            slidesPerView: 1.2,
+            spaceBetween: 15,
+            breakpoints: {
+                640: { slidesPerView: 2.3, spaceBetween: 20 },
+                820: { slidesPerView: 2.5, spaceBetween: 25 },
+                1024: { slidesPerView: 3, spaceBetween: 30 }
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
+            grabCursor: true
+        });
+    }
+});
