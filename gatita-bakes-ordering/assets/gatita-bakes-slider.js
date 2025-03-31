@@ -2,7 +2,7 @@
  * Plugin Name:     Gatita Bakes Ordering
  * Filename:         assets/gatita-bakes-slider.js
  * Description:      Handles Swiper JS initialization, dynamic form field visibility, and dynamic order summary updates.
- * Version:          1.7.7
+ * Version:          1.8.0
  * Author:           Bucketbranch
  */
 
