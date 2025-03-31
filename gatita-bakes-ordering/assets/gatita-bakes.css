@@ -2,178 +2,332 @@
  ** Plugin Name:      Gatita Bakes Ordering       **
  * Filename:          assets/gatita-bakes.css
  * Description:       Custom Stylesheet for Gatita Bakes Ordering Plugin
- * Version:           1.7.7 // Added basic Summary Styling
+ * Version:           1.8.1 // Enhanced product display grid, improved image sizing, restored quantity controls, refined form borders and spacing
  * Author:            Bucketbranch
  */
-
 /* =========================================================================
-   Gatita Bakes Ordering - Custom Stylesheet v1.7.7 (Added Summary Styling)
+   Gatita Bakes Ordering - Custom Stylesheet v1.8.1 (Improved UI & Controls)
    ========================================================================= */
 
-/* --- Define Brand Colors --- */
-:root { /* Keep colors */ }
-
-/* --- Basic Reset & Defaults --- */
-#gatita-order-form *, .gatita-hero-section * { box-sizing: border-box; }
-
-/* --- HIDE PLUGIN HERO SECTION --- */
-.gatita-hero-section { display: none !important; }
-
-/* --- General Button Styles --- */
-/* ... Keep button styles ... */
-
-/* === Order Form - General Styling & Framing === */
-#gatita-order-form { max-width: 1000px; margin: 40px auto; padding: 30px 40px; background-color: #fff; border: 1px solid var(--gatita-brand-border); border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.07); color: var(--gatita-text-main); }
-#gatita-order-form > div { width: 100%; max-width: 100%; }
-#gatita-order-form h2 { text-align: center; color: var(--gatita-brand-dark); margin-top: 0; margin-bottom: 1.5em; font-weight: 700; font-size: 2em; padding-bottom: 0.6em; border-bottom: 1px solid var(--gatita-brand-border); }
-#gatita-order-form .gatita-order-product-section h2 { margin-top: 0; text-align: left; font-size: 1.8em; border-bottom: none; padding-bottom: 0; }
-#gatita-order-form p { color: var(--gatita-text-light); line-height: 1.6; }
-
-/* ====================================
-   Order Form - Product Slider Area (TOP)
-   ==================================== */
-/* ... Keep Product Slider / Card styles from v1.7.5 ... */
-.gatita-order-product-section { margin-bottom: 40px; position: relative; padding: 0; }
-.gatita-product-slider { margin: 0 auto; position: relative; overflow: hidden; list-style: none; padding: 10px 0px; z-index: 1; width: 100%; padding-bottom: 60px; min-height: 1px; }
-.swiper-wrapper { align-items: stretch; }
-.swiper-slide { flex-shrink: 0; width: auto; height: auto; display: flex; padding: 10px 0; box-sizing: border-box; margin-right: var(--swiper-slides-space-between); }
-.swiper-slide:last-child { margin-right: 0; }
-.swiper-slide .gatita-product-card { height: 100%; width: 100%; }
-.swiper-slide .gatita-product-card { border: 1px solid var(--gatita-brand-border); border-radius: 8px; padding: 20px; text-align: center; background-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.06); display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; color: var(--gatita-text-main); margin: 0 10px; }
-.swiper-slide:hover .gatita-product-card { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-#gatita-order-form .swiper-slide .gatita-product-card img { display: block; width: 100%; height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; }
-#gatita-order-form .swiper-slide .gatita-product-card h3 { font-size: 1.25em; color: var(--gatita-brand-dark); margin-top: 0; margin-bottom: 0.6em; font-weight: 700; }
-#gatita-order-form .swiper-slide .gatita-product-card p { font-size: 0.9em; color: var(--gatita-text-light); line-height: 1.5; margin-bottom: 1em; flex-grow: 1; }
-#gatita-order-form .swiper-slide .gatita-product-card .price { font-size: 1.15em; color: var(--gatita-brand-secondary); font-weight: 600; margin-top: auto; margin-bottom: 15px; flex-grow: 0; }
-#gatita-order-form .swiper-slide .gatita-product-order-controls { display: flex; margin-top: 15px; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: nowrap; flex-grow: 0; border-top: 1px solid #eee; padding-top: 15px; }
-#gatita-order-form .swiper-slide .gatita-product-order-controls label { color: var(--gatita-text-main); display: flex; cursor: pointer; font-size: 0.85em; align-items: center; }
-#gatita-order-form .swiper-slide .gatita-product-order-controls input[type="checkbox"] { margin-right: 6px; width: 17px; height: 17px; accent-color: var(--gatita-brand-primary); flex-shrink: 0; }
-#gatita-order-form .swiper-slide .gatita-product-order-controls .quantity-label { margin-left: auto; margin-right: 6px; font-size: 0.85em; color: var(--gatita-text-light); white-space: nowrap; flex-shrink: 0; }
-#gatita-order-form .swiper-slide .gatita-product-order-controls .quantity-input { width: 50px; padding: 5px 6px; border: 1px solid var(--gatita-brand-border); border-radius: 4px; text-align: center; font-size: 0.9em; color: var(--gatita-text-main); appearance: auto; -webkit-appearance: auto; -moz-appearance: textfield; flex-shrink: 0; }
-/* Swiper Navigation */
-.swiper-button-prev, .swiper-button-next { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; margin-top: -30px; z-index: 10; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--gatita-brand-dark); background-color: rgba(255, 255, 255, 0.9); border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,0.15); transition: background-color 0.3s ease, color 0.3s ease; --swiper-navigation-size: 18px; }
-.swiper-button-prev::after, .swiper-button-next::after { font-size: var(--swiper-navigation-size) !important; font-weight: bold; }
-.swiper-button-prev:hover, .swiper-button-next:hover { background-color: var(--gatita-brand-primary); color: #fff; }
-.swiper-button-prev { left: 10px; } .swiper-button-next { right: 10px; }
-.swiper-button-disabled { opacity: 0.3; cursor: default; pointer-events: none; background-color: rgba(230, 230, 230, 0.8); }
-/* Pagination */
-.swiper-pagination { position: absolute; text-align: center; transition: 300ms opacity; transform: translate3d(0, 0, 0); z-index: 10; } .swiper-pagination.swiper-pagination-hidden { opacity: 0; }
-.swiper-horizontal>.swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal { bottom: 15px; left: 0; width: 100%; }
-.swiper-pagination-bullet { width: 9px; height: 9px; display: inline-block; border-radius: 50%; background: var(--gatita-brand-secondary); opacity: 0.3; margin: 0 5px !important; }
-.swiper-pagination-bullet-active { background: var(--gatita-brand-primary); opacity: 1; }
-
-
-/* ====================================
-   Order Form - Details/Summary Area BELOW Slider
-   ==================================== */
-.gatita-order-details-wrapper { display: block; width: 100%; position: relative; padding: 0; margin-top: 40px; }
-.gatita-order-main-details, .gatita-order-summary-area { width: 100%; min-width: 0; margin-bottom: 40px; }
-.gatita-details-section { margin-bottom: 30px; padding: 30px; background-color: var(--gatita-brand-light-grey); border: 1px solid var(--gatita-brand-border); border-radius: 8px; }
-.gatita-details-section:last-child { margin-bottom: 0; }
-.gatita-details-section h2, .gatita-order-summary-area h2 { text-align: left; font-size: 1.6em; margin-top: 0; margin-bottom: 1.2em; border-bottom: 1px solid #ddd; padding-bottom: 0.6em; color: var(--gatita-brand-dark); }
-@media (min-width: 820px) { .gatita-order-details-wrapper { display: flex; flex-direction: row; gap: 40px; align-items: flex-start; padding: 0; } .gatita-order-main-details { flex: 1.8; min-width: 0; margin-bottom: 0; } .gatita-order-summary-area { flex: 1; min-width: 0; position: sticky; top: 40px; margin-bottom: 0; } .gatita-summary-sticky-content { background-color: var(--gatita-brand-light-grey); padding: 30px; border-radius: 8px; border: 1px solid var(--gatita-brand-border); } }
-
-/* ** Summary Area Styling (NEW/MODIFIED) ** */
-#gatita-cart-summary {
-    background-color: #fff;
-    border: 1px solid var(--gatita-brand-border);
-    border-radius: 6px;
+/* Base Styles */
+.gatita-bakes-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: #333;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
-    margin-bottom: 25px;
 }
-ul#gatita-cart-items {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px 0;
+
+/* Products Grid Layout */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
 }
-ul#gatita-cart-items li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px dashed #eee;
-    font-size: 0.95em;
-    color: var(--gatita-text-light);
+
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
 }
-ul#gatita-cart-items li:last-child {
-    border-bottom: none;
+
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
 }
-ul#gatita-cart-items li .item-name {
-    flex-grow: 1;
-    padding-right: 10px;
+
+/* Product Cards */
+.product-form {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-ul#gatita-cart-items li .item-qty {
-    flex-shrink: 0;
-    padding: 0 10px;
+
+.product-form:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-ul#gatita-cart-items li .item-total-price {
-    flex-shrink: 0;
-    font-weight: 600;
-    min-width: 60px; /* Align prices */
-    text-align: right;
-    color: var(--gatita-text-main);
-}
-li.cart-empty-msg {
+
+/* Product Images */
+.product-image-container {
     text-align: center;
-    font-style: italic;
-    color: #999;
-    padding: 20px 0;
-    border-bottom: none;
+    margin-bottom: 15px;
 }
-#gatita-cart-totals {
-    border-top: 2px solid var(--gatita-brand-border);
-    padding-top: 20px;
-    margin-top: 20px;
+
+.product-image {
+    width: 100%;
+    max-width: 200px; /* Consistent size */
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
 }
-#gatita-cart-totals p {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 1.1em;
-    color: var(--gatita-text-main);
+
+.product-image:hover {
+    transform: scale(1.05);
 }
-#gatita-cart-totals p.grand-total {
-    font-size: 1.3em;
-    font-weight: 700;
-    color: var(--gatita-brand-dark);
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #ddd;
-}
-#gatita-cart-totals p span:last-child {
+
+/* Product Details */
+.product-title {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #333;
     font-weight: 600;
 }
-.cart-total-placeholder { /* Hide placeholder via JS later */
-    text-align: center; font-style: italic; color: #999; padding: 15px 0;
+
+.product-description {
+    margin-bottom: 15px;
+    color: #666;
+    font-size: 0.95rem;
 }
 
-/* Form Fields Styling */
-.gatita-order-main-details .gatita-form-row { margin-bottom: 18px; }
-.gatita-order-main-details label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--gatita-brand-dark); font-size: 0.9em; }
-.gatita-order-main-details input[type="text"], .gatita-order-main-details input[type="email"], .gatita-order-main-details input[type="tel"], .gatita-order-main-details textarea, .gatita-order-main-details select { width: 100%; padding: 10px 12px; border: 1px solid var(--gatita-brand-border); border-radius: 5px; font-size: 1em; line-height: 1.5; transition: border-color 0.3s ease, box-shadow 0.3s ease; background-color: #fff; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); color: var(--gatita-text-main); }
-.gatita-order-main-details input:focus, .gatita-order-main-details textarea:focus, .gatita-order-main-details select:focus { border-color: var(--gatita-brand-primary); outline: none; box-shadow: 0 0 0 3px var(--gatita-focus-ring); }
-.gatita-order-main-details textarea { min-height: 90px; }
-.required { color: #d9534f; margin-left: 3px; }
-.gatita-radio-group label { display: block; margin-bottom: 8px; font-weight: normal; cursor: pointer; font-size: 1em; padding: 10px 12px; border: 1px solid var(--gatita-brand-border); border-radius: 5px; background-color: #fff; transition: background-color 0.3s ease, border-color 0.3s ease; color: var(--gatita-text-main); }
-.gatita-radio-group input[type="radio"] { margin-right: 8px; vertical-align: middle; width: 15px; height: 15px; accent-color: var(--gatita-brand-primary); }
+.product-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4a4a4a;
+    margin-bottom: 15px;
+}
 
-/* Conditional Sections */
-.gatita-form-section-dynamic { margin-top: 20px; padding-top: 20px; border-top: 1px dashed #ccc; overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-10px); transition: max-height 0.5s ease-out, opacity 0.4s ease-out, transform 0.4s ease-out, visibility 0s linear 0.5s; visibility: hidden; }
-.gatita-form-section-dynamic.visible { max-height: 1000px; opacity: 1; transform: translateY(0); visibility: visible; transition: max-height 0.6s ease-in, opacity 0.5s ease-in 0.1s, transform 0.5s ease-in 0.1s, visibility 0s linear 0s; }
-.gatita-form-section-dynamic h3 { font-size: 1.1em; color: var(--gatita-brand-dark); margin-top: 0; margin-bottom: 15px; text-align: left; border-bottom: none; }
-.gatita-form-section-dynamic p small { font-size: 0.85em; color: var(--gatita-text-light); display: block; margin-bottom: 15px; }
-.gatita-form-section-dynamic label { color: var(--gatita-brand-dark); font-size: 0.9em; }
-.gatita-form-section-dynamic input[type="text"], .gatita-form-section-dynamic textarea, .gatita-form-section-dynamic select { font-size: 1em; line-height: 1.5; color: var(--gatita-text-main); }
+/* Quantity Controls */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
 
-/* Submit Button Area */
-.gatita-order-summary-area .gatita-submit-row { text-align: center; margin-top: 25px; }
-.gatita-order-summary-area .gatita-payment-note { text-align: center; font-size: 0.9em; color: var(--gatita-text-light); margin-top: 15px; }
+.quantity-btn {
+    width: 32px;
+    height: 32px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+}
 
-/* Notification/Status Messages */
-.gatita-notice { padding: 15px 20px; margin: 30px auto; border-radius: 6px; border-left-width: 5px !important; border-style: solid; max-width: 1100px; font-size: 1.05em; }
-.gatita-notice-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
-.gatita-notice-error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+.quantity-btn:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.quantity-input {
+    width: 50px;
+    height: 32px;
+    text-align: center;
+    margin: 0 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Product Subtotal */
+.subtotal {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Order Summary Section */
+.order-summary {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 25px;
+    margin-top: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.order-summary-title {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+    color: #333;
+    font-weight: 600;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    color: #555;
+}
+
+.summary-total {
+    font-weight: bold;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* Buttons */
+.add-to-cart-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 20px 0 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    width: 100%;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #45a049;
+}
+
+/* Free Samples Section */
+.free-samples-container {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.free-samples-title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: 600;
+}
+
+.samples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.sample-item {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    transition: transform 0.2s;
+}
+
+.sample-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.sample-item label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.sample-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Form Fields */
+.form-row {
+    margin-bottom: 20px;
+}
+
+.form-row label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-row input[type="text"],
+.form-row input[type="email"],
+.form-row input[type="tel"],
+.form-row select,
+.form-row textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-row input[type="text"]:focus,
+.form-row input[type="email"]:focus,
+.form-row input[type="tel"]:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Order Confirmation Message */
+.order-confirmation {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4CAF50;
+    padding: 15px 20px;
+    margin: 30px 0;
+    border-radius: 4px;
+}
+
+.order-confirmation h3 {
+    color: #2e7d32;
+    margin-top: 0;
+}
 
 /* Responsive Adjustments */
-@media (max-width: 819px) { /* Tablet stack */ .gatita-order-details-wrapper { flex-direction: column; gap: 0; padding: 0; } .gatita-order-main-details, .gatita-order-summary-area { width: 100%; flex: none; margin-bottom: 40px; } .gatita-order-summary-area { position: static; } .swiper-button-prev { left: 5px; } .swiper-button-next { right: 5px; } }
-@media (max-width: 600px) { /* Mobile */ #gatita-order-form { padding: 15px; } #gatita-order-form h2 { font-size: 1.6em; } .gatita-details-section h2, .gatita-order-summary-area h2 { font-size: 1.4em; } .swiper-button-prev, .swiper-button-next { display: none !important; } .gatita-product-slider { padding-left: 5px; padding-right: 5px; padding-bottom: 40px; } }
+@media (max-width: 768px) {
+    .gatita-bakes-container {
+        padding: 15px;
+    }
+    
+    .product-form {
+        padding: 15px;
+    }
+    
+    .order-summary {
+        padding: 15px;
+    }
+    
+    .add-to-cart-btn {
+        padding: 10px 20px;
+    }
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
