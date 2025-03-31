@@ -1,215 +1,179 @@
 /**
- ** Plugin Name:       Gatita Bakes Ordering       
- * Filename: gatita-bakes-cart.js
- * Plugin URI:        https://www.gatitabakes.com/
- * Description:       Shopping cart functionality for order form
- * Version:           1.5.1
+ ** Plugin Name:      Gatita Bakes Ordering       **
+ * Filename:          assets/gatita-bakes.css
+ * Description:       Custom Stylesheet for Gatita Bakes Ordering Plugin
+ * Version:           1.8.0 // Added basic Summary Styling
  * Author:            Bucketbranch
- * Author URI:        https://www.gatitabakes.com/
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       gatita-bakes-ordering
  */
 
-jQuery(document).ready(function($) {
-    // Initialize cart functionality
-    const cart = {
-        items: {},
-        
-        // Add item to cart
-        addItem: function(productId) {
-            // Check if item already exists in cart
-            if (this.items[productId]) {
-                this.items[productId].quantity++;
-            } else {
-                const productCard = $(`.gatita-product-card button[data-product="${productId}"]`).closest('.gatita-product-card');
-                const productName = productCard.find('h3').text();
-                const productPrice = parseFloat(productCard.find('.price').text().replace('$', ''));
-                
-                this.items[productId] = {
-                    id: productId,
-                    name: productName,
-                    price: productPrice,
-                    quantity: 1
-                };
-            }
-            
-            this.updateCartUI();
-            this.updateTotals();
-        },
-        
-        // Remove item from cart
-        removeItem: function(productId) {
-            if (this.items[productId]) {
-                delete this.items[productId];
-                this.updateCartUI();
-                this.updateTotals();
-            }
-        },
-        
-        // Update item quantity
-        updateQuantity: function(productId, quantity) {
-            if (this.items[productId]) {
-                this.items[productId].quantity = Math.max(1, parseInt(quantity) || 1);
-                this.updateCartUI();
-                this.updateTotals();
-            }
-        },
-        
-        // Update the cart UI
-        updateCartUI: function() {
-            // Update cart item count
-            let totalQuantity = 0;
-            
-            Object.values(this.items).forEach(item => {
-                totalQuantity += item.quantity;
-                
-                // Update or show the cart item
-                const cartItemEl = $(`#cart-item-${item.id}`);
-                if (cartItemEl.length) {
-                    cartItemEl.show();
-                    const quantityInput = cartItemEl.find('.gatita-quantity-input');
-                    if (quantityInput.length) {
-                        quantityInput.val(item.quantity);
-                    }
-                }
-            });
-            
-            // Update the total quantity in the title
-            $('#cart-item-count').text(totalQuantity);
-            
-            // Hide removed items
-            $('.gatita-cart-item').each(function() {
-                const productId = $(this).data('product-id');
-                if (!cart.items[productId]) {
-                    $(this).hide();
-                }
-            });
-        },
-        
-        // Calculate and update order totals
-        updateTotals: function() {
-            let subtotal = 0;
-            
-            Object.values(this.items).forEach(item => {
-                subtotal += item.price * item.quantity;
-            });
-            
-            const taxRate = 0.0; // Update as needed
-            const tax = subtotal * taxRate;
-            const total = subtotal + tax;
-            
-            // Update total displays
-            $('.gatita-subtotal-amount').text('$' + subtotal.toFixed(2));
-            $('.gatita-tax-amount').text('$' + tax.toFixed(2));
-            $('.gatita-total-amount').text('$' + total.toFixed(2));
-        }
-    };
-    
-    // Event Listeners
-    
-    // Add to cart buttons
-    $('.gatita-add-to-cart').click(function() {
-        const productId = $(this).data('product');
-        cart.addItem(productId);
-    });
-    
-    // Quantity decrease in cart
-    $(document).on('click', '.gatita-quantity-decrease', function() {
-        const cartItem = $(this).closest('.gatita-cart-item');
-        const productId = cartItem.data('product-id');
-        const quantityInput = cartItem.find('.gatita-quantity-input');
-        const currentQty = parseInt(quantityInput.val());
-        
-        if (currentQty > 1) {
-            cart.updateQuantity(productId, currentQty - 1);
-        }
-    });
-    
-    // Quantity increase in cart
-    $(document).on('click', '.gatita-quantity-increase', function() {
-        const cartItem = $(this).closest('.gatita-cart-item');
-        const productId = cartItem.data('product-id');
-        const quantityInput = cartItem.find('.gatita-quantity-input');
-        const currentQty = parseInt(quantityInput.val());
-        
-        cart.updateQuantity(productId, currentQty + 1);
-    });
-    
-    // Quantity input changes
-    $(document).on('change', '.gatita-quantity-input', function() {
-        const cartItem = $(this).closest('.gatita-cart-item');
-        const productId = cartItem.data('product-id');
-        cart.updateQuantity(productId, $(this).val());
-    });
-    
-    // Remove item from cart
-    $(document).on('click', '.gatita-remove-item', function() {
-        const cartItem = $(this).closest('.gatita-cart-item');
-        const productId = cartItem.data('product-id');
-        cart.removeItem(productId);
-    });
-    
-    // Apply promo code
-    $('#apply-promo').click(function() {
-        const promoCode = $('#promo_code').val().trim();
-        if (promoCode) {
-            alert('Promo code applied: ' + promoCode);
-            // Add actual promo code logic here
-            cart.updateTotals();
-        } else {
-            alert('Please enter a promo code');
-        }
-    });
-    
-    // Order type toggle (pickup/delivery)
-    $('input[name="order_type"]').on('change', function() {
-        const selectedType = $('input[name="order_type"]:checked').val();
-        
-        if (selectedType === 'pickup') {
-            $('#pickup-location-fields').addClass('visible');
-            $('#delivery-address-fields').removeClass('visible');
-            
-            // Toggle required attributes
-            $('#pickup_location').prop('required', true);
-            $('#delivery_street, #delivery_city, #delivery_zip').prop('required', false);
-        } else if (selectedType === 'delivery') {
-            $('#pickup-location-fields').removeClass('visible');
-            $('#delivery-address-fields').addClass('visible');
-            
-            // Toggle required attributes
-            $('#pickup_location').prop('required', false);
-            $('#delivery_street, #delivery_city, #delivery_zip').prop('required', true);
-        }
-    });
-    
-    // Initialize order type fields
-    $('input[name="order_type"]:checked').trigger('change');
-    
-    // Form validation before submission
-    $('#gatita-order-form').on('submit', function(e) {
-        const itemCount = Object.keys(cart.items).length;
-        if (itemCount === 0) {
-            e.preventDefault();
-            alert('Please add at least one item to your cart before proceeding.');
-        }
-    });
-    
-    // Additional Swiper initialization
-    if (typeof Swiper !== 'undefined') {
-        new Swiper('.gatita-product-slider', {
-            slidesPerView: 1.2,
-            spaceBetween: 15,
-            breakpoints: {
-                640: { slidesPerView: 2.3, spaceBetween: 20 },
-                820: { slidesPerView: 2.5, spaceBetween: 25 },
-                1024: { slidesPerView: 3, spaceBetween: 30 }
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev'
-            },
-            grabCursor: true
-        });
-    }
-});
+/* =========================================================================
+   Gatita Bakes Ordering - Custom Stylesheet v1.7.7 (Added Summary Styling)
+   ========================================================================= */
+
+/* --- Define Brand Colors --- */
+:root { /* Keep colors */ }
+
+/* --- Basic Reset & Defaults --- */
+#gatita-order-form *, .gatita-hero-section * { box-sizing: border-box; }
+
+/* --- HIDE PLUGIN HERO SECTION --- */
+.gatita-hero-section { display: none !important; }
+
+/* --- General Button Styles --- */
+/* ... Keep button styles ... */
+
+/* === Order Form - General Styling & Framing === */
+#gatita-order-form { max-width: 1000px; margin: 40px auto; padding: 30px 40px; background-color: #fff; border: 1px solid var(--gatita-brand-border); border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.07); color: var(--gatita-text-main); }
+#gatita-order-form > div { width: 100%; max-width: 100%; }
+#gatita-order-form h2 { text-align: center; color: var(--gatita-brand-dark); margin-top: 0; margin-bottom: 1.5em; font-weight: 700; font-size: 2em; padding-bottom: 0.6em; border-bottom: 1px solid var(--gatita-brand-border); }
+#gatita-order-form .gatita-order-product-section h2 { margin-top: 0; text-align: left; font-size: 1.8em; border-bottom: none; padding-bottom: 0; }
+#gatita-order-form p { color: var(--gatita-text-light); line-height: 1.6; }
+
+/* ====================================
+   Order Form - Product Slider Area (TOP)
+   ==================================== */
+/* ... Keep Product Slider / Card styles from v1.7.5 ... */
+.gatita-order-product-section { margin-bottom: 40px; position: relative; padding: 0; }
+.gatita-product-slider { margin: 0 auto; position: relative; overflow: hidden; list-style: none; padding: 10px 0px; z-index: 1; width: 100%; padding-bottom: 60px; min-height: 1px; }
+.swiper-wrapper { align-items: stretch; }
+.swiper-slide { flex-shrink: 0; width: auto; height: auto; display: flex; padding: 10px 0; box-sizing: border-box; margin-right: var(--swiper-slides-space-between); }
+.swiper-slide:last-child { margin-right: 0; }
+.swiper-slide .gatita-product-card { height: 100%; width: 100%; }
+.swiper-slide .gatita-product-card { border: 1px solid var(--gatita-brand-border); border-radius: 8px; padding: 20px; text-align: center; background-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.06); display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; color: var(--gatita-text-main); margin: 0 10px; }
+.swiper-slide:hover .gatita-product-card { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+#gatita-order-form .swiper-slide .gatita-product-card img { display: block; width: 100%; height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; }
+#gatita-order-form .swiper-slide .gatita-product-card h3 { font-size: 1.25em; color: var(--gatita-brand-dark); margin-top: 0; margin-bottom: 0.6em; font-weight: 700; }
+#gatita-order-form .swiper-slide .gatita-product-card p { font-size: 0.9em; color: var(--gatita-text-light); line-height: 1.5; margin-bottom: 1em; flex-grow: 1; }
+#gatita-order-form .swiper-slide .gatita-product-card .price { font-size: 1.15em; color: var(--gatita-brand-secondary); font-weight: 600; margin-top: auto; margin-bottom: 15px; flex-grow: 0; }
+#gatita-order-form .swiper-slide .gatita-product-order-controls { display: flex; margin-top: 15px; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: nowrap; flex-grow: 0; border-top: 1px solid #eee; padding-top: 15px; }
+#gatita-order-form .swiper-slide .gatita-product-order-controls label { color: var(--gatita-text-main); display: flex; cursor: pointer; font-size: 0.85em; align-items: center; }
+#gatita-order-form .swiper-slide .gatita-product-order-controls input[type="checkbox"] { margin-right: 6px; width: 17px; height: 17px; accent-color: var(--gatita-brand-primary); flex-shrink: 0; }
+#gatita-order-form .swiper-slide .gatita-product-order-controls .quantity-label { margin-left: auto; margin-right: 6px; font-size: 0.85em; color: var(--gatita-text-light); white-space: nowrap; flex-shrink: 0; }
+#gatita-order-form .swiper-slide .gatita-product-order-controls .quantity-input { width: 50px; padding: 5px 6px; border: 1px solid var(--gatita-brand-border); border-radius: 4px; text-align: center; font-size: 0.9em; color: var(--gatita-text-main); appearance: auto; -webkit-appearance: auto; -moz-appearance: textfield; flex-shrink: 0; }
+/* Swiper Navigation */
+.swiper-button-prev, .swiper-button-next { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; margin-top: -30px; z-index: 10; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--gatita-brand-dark); background-color: rgba(255, 255, 255, 0.9); border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,0.15); transition: background-color 0.3s ease, color 0.3s ease; --swiper-navigation-size: 18px; }
+.swiper-button-prev::after, .swiper-button-next::after { font-size: var(--swiper-navigation-size) !important; font-weight: bold; }
+.swiper-button-prev:hover, .swiper-button-next:hover { background-color: var(--gatita-brand-primary); color: #fff; }
+.swiper-button-prev { left: 10px; } .swiper-button-next { right: 10px; }
+.swiper-button-disabled { opacity: 0.3; cursor: default; pointer-events: none; background-color: rgba(230, 230, 230, 0.8); }
+/* Pagination */
+.swiper-pagination { position: absolute; text-align: center; transition: 300ms opacity; transform: translate3d(0, 0, 0); z-index: 10; } .swiper-pagination.swiper-pagination-hidden { opacity: 0; }
+.swiper-horizontal>.swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal { bottom: 15px; left: 0; width: 100%; }
+.swiper-pagination-bullet { width: 9px; height: 9px; display: inline-block; border-radius: 50%; background: var(--gatita-brand-secondary); opacity: 0.3; margin: 0 5px !important; }
+.swiper-pagination-bullet-active { background: var(--gatita-brand-primary); opacity: 1; }
+
+
+/* ====================================
+   Order Form - Details/Summary Area BELOW Slider
+   ==================================== */
+.gatita-order-details-wrapper { display: block; width: 100%; position: relative; padding: 0; margin-top: 40px; }
+.gatita-order-main-details, .gatita-order-summary-area { width: 100%; min-width: 0; margin-bottom: 40px; }
+.gatita-details-section { margin-bottom: 30px; padding: 30px; background-color: var(--gatita-brand-light-grey); border: 1px solid var(--gatita-brand-border); border-radius: 8px; }
+.gatita-details-section:last-child { margin-bottom: 0; }
+.gatita-details-section h2, .gatita-order-summary-area h2 { text-align: left; font-size: 1.6em; margin-top: 0; margin-bottom: 1.2em; border-bottom: 1px solid #ddd; padding-bottom: 0.6em; color: var(--gatita-brand-dark); }
+@media (min-width: 820px) { .gatita-order-details-wrapper { display: flex; flex-direction: row; gap: 40px; align-items: flex-start; padding: 0; } .gatita-order-main-details { flex: 1.8; min-width: 0; margin-bottom: 0; } .gatita-order-summary-area { flex: 1; min-width: 0; position: sticky; top: 40px; margin-bottom: 0; } .gatita-summary-sticky-content { background-color: var(--gatita-brand-light-grey); padding: 30px; border-radius: 8px; border: 1px solid var(--gatita-brand-border); } }
+
+/* ** Summary Area Styling (NEW/MODIFIED) ** */
+#gatita-cart-summary {
+    background-color: #fff;
+    border: 1px solid var(--gatita-brand-border);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+ul#gatita-cart-items {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+ul#gatita-cart-items li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #eee;
+    font-size: 0.95em;
+    color: var(--gatita-text-light);
+}
+ul#gatita-cart-items li:last-child {
+    border-bottom: none;
+}
+ul#gatita-cart-items li .item-name {
+    flex-grow: 1;
+    padding-right: 10px;
+}
+ul#gatita-cart-items li .item-qty {
+    flex-shrink: 0;
+    padding: 0 10px;
+}
+ul#gatita-cart-items li .item-total-price {
+    flex-shrink: 0;
+    font-weight: 600;
+    min-width: 60px; /* Align prices */
+    text-align: right;
+    color: var(--gatita-text-main);
+}
+li.cart-empty-msg {
+    text-align: center;
+    font-style: italic;
+    color: #999;
+    padding: 20px 0;
+    border-bottom: none;
+}
+#gatita-cart-totals {
+    border-top: 2px solid var(--gatita-brand-border);
+    padding-top: 20px;
+    margin-top: 20px;
+}
+#gatita-cart-totals p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+    color: var(--gatita-text-main);
+}
+#gatita-cart-totals p.grand-total {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--gatita-brand-dark);
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+#gatita-cart-totals p span:last-child {
+    font-weight: 600;
+}
+.cart-total-placeholder { /* Hide placeholder via JS later */
+    text-align: center; font-style: italic; color: #999; padding: 15px 0;
+}
+
+/* Form Fields Styling */
+.gatita-order-main-details .gatita-form-row { margin-bottom: 18px; }
+.gatita-order-main-details label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--gatita-brand-dark); font-size: 0.9em; }
+.gatita-order-main-details input[type="text"], .gatita-order-main-details input[type="email"], .gatita-order-main-details input[type="tel"], .gatita-order-main-details textarea, .gatita-order-main-details select { width: 100%; padding: 10px 12px; border: 1px solid var(--gatita-brand-border); border-radius: 5px; font-size: 1em; line-height: 1.5; transition: border-color 0.3s ease, box-shadow 0.3s ease; background-color: #fff; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); color: var(--gatita-text-main); }
+.gatita-order-main-details input:focus, .gatita-order-main-details textarea:focus, .gatita-order-main-details select:focus { border-color: var(--gatita-brand-primary); outline: none; box-shadow: 0 0 0 3px var(--gatita-focus-ring); }
+.gatita-order-main-details textarea { min-height: 90px; }
+.required { color: #d9534f; margin-left: 3px; }
+.gatita-radio-group label { display: block; margin-bottom: 8px; font-weight: normal; cursor: pointer; font-size: 1em; padding: 10px 12px; border: 1px solid var(--gatita-brand-border); border-radius: 5px; background-color: #fff; transition: background-color 0.3s ease, border-color 0.3s ease; color: var(--gatita-text-main); }
+.gatita-radio-group input[type="radio"] { margin-right: 8px; vertical-align: middle; width: 15px; height: 15px; accent-color: var(--gatita-brand-primary); }
+
+/* Conditional Sections */
+.gatita-form-section-dynamic { margin-top: 20px; padding-top: 20px; border-top: 1px dashed #ccc; overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-10px); transition: max-height 0.5s ease-out, opacity 0.4s ease-out, transform 0.4s ease-out, visibility 0s linear 0.5s; visibility: hidden; }
+.gatita-form-section-dynamic.visible { max-height: 1000px; opacity: 1; transform: translateY(0); visibility: visible; transition: max-height 0.6s ease-in, opacity 0.5s ease-in 0.1s, transform 0.5s ease-in 0.1s, visibility 0s linear 0s; }
+.gatita-form-section-dynamic h3 { font-size: 1.1em; color: var(--gatita-brand-dark); margin-top: 0; margin-bottom: 15px; text-align: left; border-bottom: none; }
+.gatita-form-section-dynamic p small { font-size: 0.85em; color: var(--gatita-text-light); display: block; margin-bottom: 15px; }
+.gatita-form-section-dynamic label { color: var(--gatita-brand-dark); font-size: 0.9em; }
+.gatita-form-section-dynamic input[type="text"], .gatita-form-section-dynamic textarea, .gatita-form-section-dynamic select { font-size: 1em; line-height: 1.5; color: var(--gatita-text-main); }
+
+/* Submit Button Area */
+.gatita-order-summary-area .gatita-submit-row { text-align: center; margin-top: 25px; }
+.gatita-order-summary-area .gatita-payment-note { text-align: center; font-size: 0.9em; color: var(--gatita-text-light); margin-top: 15px; }
+
+/* Notification/Status Messages */
+.gatita-notice { padding: 15px 20px; margin: 30px auto; border-radius: 6px; border-left-width: 5px !important; border-style: solid; max-width: 1100px; font-size: 1.05em; }
+.gatita-notice-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+.gatita-notice-error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+
+/* Responsive Adjustments */
+@media (max-width: 819px) { /* Tablet stack */ .gatita-order-details-wrapper { flex-direction: column; gap: 0; padding: 0; } .gatita-order-main-details, .gatita-order-summary-area { width: 100%; flex: none; margin-bottom: 40px; } .gatita-order-summary-area { position: static; } .swiper-button-prev { left: 5px; } .swiper-button-next { right: 5px; } }
+@media (max-width: 600px) { /* Mobile */ #gatita-order-form { padding: 15px; } #gatita-order-form h2 { font-size: 1.6em; } .gatita-details-section h2, .gatita-order-summary-area h2 { font-size: 1.4em; } .swiper-button-prev, .swiper-button-next { display: none !important; } .gatita-product-slider { padding-left: 5px; padding-right: 5px; padding-bottom: 40px; } }
