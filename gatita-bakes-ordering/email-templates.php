@@ -2,7 +2,7 @@
 /**
  * Gatita Bakes - Email Template Example
  * Filename: email-templates.php
- * Version: 1.8.0 (Corrected conditional logic, uses order number)
+ * Version: 1.7.6 (Corrected conditional logic, uses order number)
  * Author: Bucketbranch
  *
  * This template receives the following variables from gatita-bakes-ordering.php:
