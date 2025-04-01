@@ -689,18 +689,7 @@ function gatita_bakes_plugin_activation() {
     // Create CSS file if it doesn't exist
     $css_file = $assets_dir . '/gatita-bakes.css';
     if (!file_exists($css_file)) {
-        $css_content = "/**
- ** Plugin Name:      Gatita Bakes Ordering       ** 
- * Filename:          gatita-bakes.css
- * Plugin URI:        https://www.gatitabakes.com/
- * Description:       Styles for Gatita Bakes ordering system
- * Version:           1.8.0 // \"Initial CSS file\"
- * Author:            Bucketbranch
- * Author URI:        https://www.gatitabakes.com/
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       gatita-bakes-ordering
- */
+        $css_content = "
 
 /* Base styles for Gatita Bakes ordering system */
 .gatita-form-section-dynamic {
@@ -817,18 +806,7 @@ function gatita_bakes_plugin_activation() {
     // Create Cart JS file if it doesn't exist
     $cart_js_file = $assets_dir . '/gatita-bakes-cart.js';
     if (!file_exists($cart_js_file)) {
-        $cart_js_content = "/**
- ** Plugin Name:      Gatita Bakes Ordering       ** 
- * Filename:          gatita-bakes-cart.js
- * Plugin URI:        https://www.gatitabakes.com/
- * Description:       Cart functionality for Gatita Bakes ordering system
- * Version:           1.8.0 // \"Initial cart script\"
- * Author:            Bucketbranch
- * Author URI:        https://www.gatitabakes.com/
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       gatita-bakes-ordering
- */
+        $cart_js_content = "
 
 jQuery(document).ready(function($) {
     // Initialize cart functionality
@@ -1008,19 +986,7 @@ jQuery(document).ready(function($) {
     // Create email template file if it doesn't exist
     $email_template_file = GATITA_BAKES_PLUGIN_DIR . 'email-templates.php';
     if (!file_exists($email_template_file)) {
-        $email_template_content = "<?php
-/**
- ** Plugin Name:      Gatita Bakes Ordering       **
- * Filename:          email-templates.php
- * Plugin URI:        https://www.gatitabakes.com/
- * Description:       Email template for Gatita Bakes order confirmation
- * Version:           1.8.0 // \"Initial email template\"
- * Author:            Bucketbranch
- * Author URI:        https://www.gatitabakes.com/
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       gatita-bakes-ordering
- */
+        $email_template_content = "
 
 /**
  * Variables available:
