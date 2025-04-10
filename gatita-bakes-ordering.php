@@ -1175,8 +1175,8 @@ function gatita_bakes_send_order_emails($order_data) {
     add_filter('phpmailer_init', function($phpmailer) use ($order_data) {
         try {
             $phpmailer->isSMTP();
-            $phpmailer->Host = 'smtp.gmail.com';
-            $phpmailer->Port = 587;
+            $phpmailer->Host = 'mail.gatitabakes.com';  // Your domain's mail server
+            $phpmailer->Port = 587;                      // Common SMTP port
             $phpmailer->SMTPAuth = true;
             $phpmailer->SMTPSecure = 'tls';
             $phpmailer->Username = 'orders@gatitabakes.com';
